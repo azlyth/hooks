@@ -8,11 +8,19 @@ import React, { Component } from 'react';
 import {
   AppRegistry,
   Dimensions,
+  NativeModules,
   StyleSheet,
   Text,
+  ToastAndroid,
   View,
 } from 'react-native';
 import { Button, Container, Content } from 'native-base';
+
+function connect() {
+  NativeModules.SSH.connect('some-host.com', 'some-password', function(result) {
+    ToastAndroid.show(result, ToastAndroid.LONG);
+  });
+}
 
 export default class hooks extends Component {
   render() {
@@ -21,7 +29,7 @@ export default class hooks extends Component {
         <Content>
           <View style={styles.content}>
             <Text style={styles.title}>Hooks</Text>
-            <Button large block style={styles.button}>Add Server</Button>
+            <Button large block style={styles.button} onPress={connect}>Add Server</Button>
           </View>
         </Content>
       </Container>

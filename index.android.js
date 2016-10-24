@@ -1,9 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React, { Component } from 'react';
 import {
   AppRegistry,
@@ -11,14 +5,20 @@ import {
   NativeModules,
   StyleSheet,
   Text,
+  TextInput,
   ToastAndroid,
   View,
 } from 'react-native';
 import { Button, Container, Content } from 'native-base';
 
-function connect() {
-  NativeModules.SSH.connect('some-host.com', 'some-password', function(result) {
-    ToastAndroid.show(result, ToastAndroid.LONG);
+function connect(user, host, password) {
+  ToastAndroid.show("Connecting to " + host + " as " + user + "...", ToastAndroid.SHORT);
+
+  NativeModules.SSH.connect(user, host, password, (result) => {
+    ToastAndroid.show('Success!', ToastAndroid.SHORT);
+    console.log(result);
+  }, (errorMessage) => {
+    ToastAndroid.show(errorMessage, ToastAndroid.SHORT);
   });
 }
 
@@ -29,7 +29,12 @@ export default class hooks extends Component {
         <Content>
           <View style={styles.content}>
             <Text style={styles.title}>Hooks</Text>
-            <Button large block style={styles.button} onPress={connect}>Add Server</Button>
+            <View>
+              <TextInput style={styles.input} placeholder="User" onChangeText={(user) => this.setState({user})}></TextInput>
+              <TextInput style={styles.input} placeholder="Host" onChangeText={(host) => this.setState({host})}></TextInput>
+              <TextInput style={styles.input} placeholder="Password" onChangeText={(password) => this.setState({password})}></TextInput>
+            </View>
+            <Button large block style={styles.button} onPress={() => connect(this.state.user, this.state.host, this.state.password)}>Add Server</Button>
           </View>
         </Content>
       </Container>
@@ -37,7 +42,10 @@ export default class hooks extends Component {
   }
 }
 
-const {height: screenHeight} = Dimensions.get('window');
+const {
+  height: screenHeight,
+  width:  screenWidth,
+} = Dimensions.get('window');
 const styles = StyleSheet.create({
   content: {
     flex: 1,
@@ -48,6 +56,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 40,
     color: '#5067FF',
+  },
+  input: {
+    textAlign: "center",
+    fontSize: 30,
+    width: screenWidth - 50,
+    marginLeft: 25,
+    marginRight: 25,
   },
   button: {
     margin: 25,

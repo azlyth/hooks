@@ -1,4 +1,4 @@
 import { AppRegistry } from 'react-native';
-import hooks from './js/setup';
+import App from './js/app';
 
-AppRegistry.registerComponent('hooks', () => hooks);
+AppRegistry.registerComponent('hooks', () => App);

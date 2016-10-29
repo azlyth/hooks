@@ -3,7 +3,10 @@ import {
   NativeModules,
   ToastAndroid,
 } from 'react-native';
+import { Provider } from 'react-redux';
 import Home from './components/home';
+import store from './store';
+import { Router, Scene } from 'react-native-router-flux';
 
 
 function connect(user, host, password) {
@@ -17,11 +20,18 @@ function connect(user, host, password) {
   });
 }
 
-class hooks extends Component {
+class App extends Component {
   render() {
-    return (<Home />);
+    return (
+      <Provider store={store}>
+        <Router hideNavBar={true}>
+          <Scene key="root">
+            <Scene key="home" component={Home} title="Home Title" initial={true} />
+          </Scene>
+        </Router>
+      </Provider>
+    );
   }
 }
 
-export default hooks;
-
+export default App;

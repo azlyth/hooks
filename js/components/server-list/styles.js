@@ -5,7 +5,6 @@ import {
 
 const {
   height: screenHeight,
-  width:  screenWidth,
 } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
@@ -15,20 +14,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around'
   },
-  title: {
-    fontSize: 40,
-    color: '#5067FF',
+  serverCard: {
+    margin: 15,
+    marginBottom: 0,
   },
-  input: {
-    textAlign: "center",
+  serverCardItem: {
+    borderColor: 'white',
+  },
+  serverText: {
+    textAlign: 'center',
+    padding: 15,
+    fontSize: 25,
+  },
+  serverAdd: {
+    textAlign: 'center',
+    padding: 15,
     fontSize: 30,
-    width: screenWidth - 50,
-    marginLeft: 25,
-    marginRight: 25,
-  },
-  button: {
-    margin: 25,
-  },
+  }
 });
 
 export default styles;

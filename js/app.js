@@ -4,9 +4,11 @@ import {
   ToastAndroid,
 } from 'react-native';
 import { Provider } from 'react-redux';
-import Home from './components/home';
-import store from './store';
 import { Router, Scene } from 'react-native-router-flux';
+
+import store from './store';
+import Home from './components/home';
+import ServerList from './components/server-list';
 
 
 function connect(user, host, password) {
@@ -26,7 +28,8 @@ class App extends Component {
       <Provider store={store}>
         <Router hideNavBar={true}>
           <Scene key="root">
-            <Scene key="home" component={Home} title="Home Title" initial={true} />
+            <Scene key="home" component={Home} title="Home" initial={true} />
+            <Scene key="listServers" component={ServerList} title="Server List" />
           </Scene>
         </Router>
       </Provider>

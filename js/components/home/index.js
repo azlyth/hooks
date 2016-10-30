@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import {
   Text,
   TextInput,
-  ToastAndroid,
   View,
 } from 'react-native';
 import { Button, Container, Content } from 'native-base';
 import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux';
 
 import styles from './styles';
 import { addServer } from '../../actions/server';
@@ -29,8 +29,8 @@ class Home extends Component {
   }
 
   addServer() {
-    ToastAndroid.show("Adding server...", ToastAndroid.SHORT);
     this.props.addServer(this.state);
+    Actions.listServers();
   }
 
   render() {

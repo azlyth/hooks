@@ -12,11 +12,10 @@ import styles from './styles';
 import { addServer } from '../../actions/server';
 
 
-class Home extends Component {
+class ServerCreator extends Component {
 
   static propTypes = {
     addServer: React.PropTypes.func,
-    getServers: React.PropTypes.func,
   }
 
   constructor(props) {
@@ -24,13 +23,9 @@ class Home extends Component {
     this.state = {};
   }
 
-  logServers() {
-    console.log(this.props.getServers());
-  }
-
   addServer() {
     this.props.addServer(this.state);
-    Actions.listServers();
+    Actions.pop();
   }
 
   render() {
@@ -38,14 +33,13 @@ class Home extends Component {
       <Container>
         <Content>
           <View style={styles.content}>
-            <Text style={styles.title}>Hooks</Text>
+            <Text style={styles.title}>New Server</Text>
             <View>
               <TextInput style={styles.input} placeholder="User" onChangeText={(user) => this.setState({user})}></TextInput>
               <TextInput style={styles.input} placeholder="Host" onChangeText={(host) => this.setState({host})}></TextInput>
               <TextInput style={styles.input} placeholder="Password" onChangeText={(password) => this.setState({password})}></TextInput>
             </View>
             <Button large block style={styles.button} onPress={() => this.addServer()}>Add Server</Button>
-            {/* <Button large block style={styles.button} onPress={() => this.logServers()}>Log Servers</Button> */}
           </View>
         </Content>
       </Container>
@@ -53,19 +47,10 @@ class Home extends Component {
   }
 }
 
-
-function bindState(state) {
-  return {
-    getServers: () => state
-  };
-}
-
-
 function bindActions(dispatch) {
   return {
     addServer: server => dispatch(addServer(server))
   };
 }
 
-
-export default connect(bindState, bindActions)(Home);
+export default connect(null, bindActions)(ServerCreator);

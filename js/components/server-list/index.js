@@ -4,6 +4,7 @@ import {
   View,
 } from 'react-native';
 import { Card, CardItem, Container, Content } from 'native-base';
+import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 
 import styles from './styles.js';
@@ -33,8 +34,8 @@ class ServerList extends Component {
             </Card>
           )}
           <Card style={styles.serverCard}>
-            <CardItem style={styles.serverCardItem}>
-              <Text style={styles.serverAdd}>+</Text>
+            <CardItem button style={styles.serverCardItem} onPress={Actions.createServer}>
+              <Text style={styles.serverText}>+</Text>
             </CardItem>
           </Card>
         </Content>

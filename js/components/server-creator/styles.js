@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 40,
-    color: '#5067FF',
+    color: 'black',
   },
   input: {
     textAlign: "center",

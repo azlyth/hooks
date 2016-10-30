@@ -16,7 +16,6 @@ const styles = StyleSheet.create({
   },
   serverCard: {
     margin: 15,
-    marginBottom: 0,
   },
   serverCardItem: {
     borderColor: 'white',
@@ -25,12 +24,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     padding: 15,
     fontSize: 25,
+    color: 'black',
   },
-  serverAdd: {
-    textAlign: 'center',
-    padding: 15,
-    fontSize: 30,
-  }
 });
 
 export default styles;

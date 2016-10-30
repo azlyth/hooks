@@ -1,24 +1,20 @@
 import React, { Component } from 'react';
-import {
-  NativeModules,
-  ToastAndroid,
-} from 'react-native';
+import { NativeModules } from 'react-native';
 import { Provider } from 'react-redux';
 import { Router, Scene } from 'react-native-router-flux';
 
 import store from './store';
-import Home from './components/home';
+import ServerCreator from './components/server-creator';
 import ServerList from './components/server-list';
 
 
 function connect(user, host, password) {
-  ToastAndroid.show("Connecting to " + host + " as " + user + "...", ToastAndroid.SHORT);
-
   NativeModules.SSH.connect(user, host, password, (result) => {
-    ToastAndroid.show('Success!', ToastAndroid.SHORT);
+    console.log('Success!');
     console.log(result);
   }, (errorMessage) => {
-    ToastAndroid.show(errorMessage, ToastAndroid.SHORT);
+    console.log('Error!');
+    console.log(errorMessage);
   });
 }
 
@@ -28,8 +24,8 @@ class App extends Component {
       <Provider store={store}>
         <Router hideNavBar={true}>
           <Scene key="root">
-            <Scene key="home" component={Home} title="Home" initial={true} />
-            <Scene key="listServers" component={ServerList} title="Server List" />
+            <Scene key="listServers" component={ServerList} title="Server List" initial={true} />
+            <Scene key="createServer" component={ServerCreator} title="Create Server" />
           </Scene>
         </Router>
       </Provider>

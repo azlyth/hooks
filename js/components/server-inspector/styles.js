@@ -10,33 +10,23 @@ const {
 } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
-  content: {
+  body: {
     flex: 1,
-    height: screenHeight,
     alignItems: 'center',
-    justifyContent: 'space-around'
+    height: screenHeight,
   },
 
   title: {
+    marginTop: 30,
     fontSize: 35,
-    color: 'black',
   },
 
-  inputGroup: {
-    margin: 10,
-    height: 70,
-    width: screenWidth - 50,
-  },
-
-  input: {
-    textAlign: 'center',
-    fontSize: 25,
-    height: 60,
-  },
-
-  button: {
-    margin: 25,
+  content: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
 export default styles;
+

@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import {
+  Alert,
   Text,
   View,
 } from 'react-native';
@@ -27,7 +28,7 @@ class ServerList extends Component {
           <Text style={styles.title}>Servers</Text>
           {this.props.servers.map((server, index) =>
             <Card key={index} style={styles.serverCard}>
-              <CardItem style={styles.serverCardItem}>
+              <CardItem button style={styles.serverCardItem} onPress={() => Actions.inspectServer({server})}>
                 <Text style={styles.serverText}>{server.user}@{server.host}</Text>
               </CardItem>
             </Card>

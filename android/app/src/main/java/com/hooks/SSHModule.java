@@ -1,5 +1,8 @@
 package com.hooks;
 
+import java.io.InputStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.Properties;
 import java.util.Vector;
 
@@ -8,9 +11,11 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableNativeArray;
-import com.jcraft.jsch.ChannelSftp;
+import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
 
@@ -26,31 +31,23 @@ public class SSHModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void connect(String user, String host, String password, Callback success, Callback error) {
+  public void execute(ReadableMap config, String command, Callback success, Callback error) {
     try {
-      // Prepare the SSH session with the provided credentials
-      JSch jsch = new JSch();
-      Session session = jsch.getSession(user, host, 22);
-      session.setPassword(password);
+      // Get an SSH session ready
+      Session session = this.connect(config);
 
-      // Ignore the checking of the key
-      Properties prop = new Properties();
-      prop.put("StrictHostKeyChecking", "no");
-      session.setConfig(prop);
+      // Execute the command and prepare to read the output
+      ChannelExec channelExec = (ChannelExec)session.openChannel("exec");
+      InputStream in = channelExec.getInputStream();
+      channelExec.setCommand(command);
+      channelExec.connect();
 
-      // Connect to the server
-      session.connect();
-
-      // Gather the files in the user's home directory
-      ChannelSftp channel = (ChannelSftp) session.openChannel("sftp");
-      channel.connect();
-      Vector<ChannelSftp.LsEntry> files = channel.ls("/home/" + user);
-      channel.disconnect();
-
-      // Put the filenames into a JS-passable array
+      // Put the result into an JS-readable array
+      String line;
+      BufferedReader reader = new BufferedReader(new InputStreamReader(in));
       WritableNativeArray filenames = new WritableNativeArray();
-      for (int i = 0; i < files.size(); i++) {
-        filenames.pushString(files.get(i).getFilename());
+      while ((line = reader.readLine()) != null) {
+        filenames.pushString(line);
       }
 
       // Pass the array of filenames back to JS
@@ -58,5 +55,22 @@ public class SSHModule extends ReactContextBaseJavaModule {
     } catch (Exception e) {
       error.invoke("Error: " + e.getMessage());
     }
+  }
+
+  private Session connect(ReadableMap config) throws JSchException {
+    // Prepare the SSH session with the provided credentials
+    JSch jsch = new JSch();
+    Session session = jsch.getSession(config.getString("user"), config.getString("host"), 22);
+    session.setPassword(config.getString("password"));
+
+    // Ignore the checking of the key
+    Properties prop = new Properties();
+    prop.put("StrictHostKeyChecking", "no");
+    session.setConfig(prop);
+
+    // Connect to the server
+    session.connect();
+    
+    return session;
   }
 }

@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import {
+  InteractionManager,
   NativeModules,
   Text,
   View,
@@ -46,10 +47,10 @@ class ServerInspector extends Component {
   }
 
   componentDidMount() {
-    this.findActions();
+    InteractionManager.runAfterInteractions(() => this.gatherActions());
   }
 
-  findActions() {
+  gatherActions() {
     command = "ls -a .hooks-app/hooks";
 
     NativeModules.SSH.execute(this.props.server, command, (result) => {

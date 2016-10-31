@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import {
   Text,
-  TextInput,
   View,
 } from 'react-native';
-import { Button, Container, Content } from 'native-base';
+import { Button, Container, Content, Input, InputGroup } from 'native-base';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 
@@ -35,11 +34,27 @@ class ServerCreator extends Component {
           <View style={styles.content}>
             <Text style={styles.title}>New Server</Text>
             <View>
-              <TextInput style={styles.input} placeholder="User" onChangeText={(user) => this.setState({user})}></TextInput>
-              <TextInput style={styles.input} placeholder="Host" onChangeText={(host) => this.setState({host})}></TextInput>
-              <TextInput style={styles.input} placeholder="Password" onChangeText={(password) => this.setState({password})}></TextInput>
+              <InputGroup style={styles.inputGroup} borderType="regular">
+                <Input style={styles.input}
+                  placeholder="User"
+                  onChangeText={(user) => this.setState({user})} />
+              </InputGroup>
+              <InputGroup style={styles.inputGroup} borderType="regular">
+                <Input
+                  style={styles.input}
+                  placeholder="Host"
+                  onChangeText={(host) => this.setState({host})} />
+              </InputGroup>
+              <InputGroup style={styles.inputGroup} borderType="regular">
+                <Input style={styles.input}
+                  placeholder="Password"
+                  onChangeText={(password) => this.setState({password})}
+                  secureTextEntry />
+              </InputGroup>
             </View>
-            <Button large block style={styles.button} onPress={() => this.addServer()}>Add Server</Button>
+            <Button style={styles.button}
+              bordered large block
+              onPress={() => this.addServer()}>Save</Button>
           </View>
         </Content>
       </Container>

@@ -15,17 +15,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around'
   },
+
   title: {
-    fontSize: 40,
+    fontSize: 35,
     color: 'black',
   },
-  input: {
-    textAlign: "center",
-    fontSize: 30,
+
+  inputGroup: {
+    margin: 10,
+    height: 70,
     width: screenWidth - 50,
-    marginLeft: 25,
-    marginRight: 25,
   },
+
+  input: {
+    textAlign: 'center',
+    fontSize: 25,
+    height: 60,
+  },
+
   button: {
     margin: 25,
   },

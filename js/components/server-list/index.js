@@ -3,7 +3,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import { Card, CardItem, Container, Content } from 'native-base';
+import { Card, CardItem, Container, Content, Icon } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 
@@ -18,14 +18,13 @@ class ServerList extends Component {
 
   constructor(props) {
     super(props);
-    console.log(this.props.servers);
   }
 
   render() {
     return (
       <Container>
         <Content>
-          <Text style={styles.serverText}>Servers</Text>
+          <Text style={styles.title}>Servers</Text>
           {this.props.servers.map((server, index) =>
             <Card key={index} style={styles.serverCard}>
               <CardItem style={styles.serverCardItem}>
@@ -35,7 +34,9 @@ class ServerList extends Component {
           )}
           <Card style={styles.serverCard}>
             <CardItem button style={styles.serverCardItem} onPress={Actions.createServer}>
-              <Text style={styles.serverText}>+</Text>
+              <View>
+                <Icon name="md-add" />
+              </View>
             </CardItem>
           </Card>
         </Content>
@@ -45,7 +46,6 @@ class ServerList extends Component {
 }
 
 function mapStateToProps(state) {
-  console.log(state);
   return {
     servers: state.servers
   };

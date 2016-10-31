@@ -8,18 +8,31 @@ const {
 } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
+  title: {
+    textAlign: 'center',
+    padding: 15,
+    fontSize: 35,
+    color: 'black',
+  },
+
   content: {
     flex: 1,
     height: screenHeight,
     alignItems: 'center',
     justifyContent: 'space-around'
   },
+
   serverCard: {
     margin: 15,
   },
+
   serverCardItem: {
+    flex: 1,
     borderColor: 'white',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
+
   serverText: {
     textAlign: 'center',
     padding: 15,

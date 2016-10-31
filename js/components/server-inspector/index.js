@@ -54,7 +54,8 @@ class ServerInspector extends Component {
     command = "ls -a .hooks-app/hooks";
 
     NativeModules.SSH.execute(this.props.server, command, (result) => {
-      this.state.actions = result;
+      validAction = (action) => !(['.', '..'].includes(action));
+      this.setState({actions: result.filter(validAction)})
     }, (errorMessage) => {
       console.log(errorMessage);
     });

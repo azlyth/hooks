@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import {
+  NativeModules,
   Text,
   View,
 } from 'react-native';
@@ -7,6 +8,30 @@ import { Container, Content, Spinner } from 'native-base';
 import { connect } from 'react-redux';
 
 import styles from './styles.js';
+
+
+function ActionList(props) {
+  if (props.actions.length > 0) {
+    return (
+      <View>
+        {props.actions.map((action, index) =>
+          <Text key={index}>{action}</Text>
+        )}
+      </View>
+    );
+  } else {
+    return (
+      <View>
+        <Text>Gathering actions...</Text>
+        <Spinner color="blue" />
+      </View>
+    );
+  }
+}
+
+ActionList.propTypes = {
+  actions: PropTypes.array,
+};
 
 
 class ServerInspector extends Component {
@@ -17,17 +42,34 @@ class ServerInspector extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {actions: []};
+  }
+
+  componentDidMount() {
+    this.findActions();
+  }
+
+  findActions() {
+    command = "ls -a .hooks-app/hooks";
+
+    NativeModules.SSH.execute(this.props.server, command, (result) => {
+      this.state.actions = result;
+    }, (errorMessage) => {
+      console.log(errorMessage);
+    });
   }
 
   render() {
+    actions = this.state.actions;
+    server = this.props.server;
+
     return (
       <Container>
         <Content>
           <View style={styles.body}>
-            <Text style={styles.title}>{this.props.server.user}@{this.props.server.host}</Text>
+            <Text style={styles.title}>{server.user}@{server.host}</Text>
             <View style={styles.content}>
-              <Text>Connecting...</Text>
-              <Spinner color="blue" />
+              <ActionList actions={actions} />
             </View>
           </View>
         </Content>

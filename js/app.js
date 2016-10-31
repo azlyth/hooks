@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { NativeModules } from 'react-native';
 import { Provider } from 'react-redux';
 import { Router, Scene } from 'react-native-router-flux';
 
@@ -8,16 +7,6 @@ import ServerCreator from './components/server-creator';
 import ServerList from './components/server-list';
 import ServerInspector from './components/server-inspector';
 
-
-function connect(user, host, password) {
-  NativeModules.SSH.connect(user, host, password, (result) => {
-    console.log('Success!');
-    console.log(result);
-  }, (errorMessage) => {
-    console.log('Error!');
-    console.log(errorMessage);
-  });
-}
 
 class App extends Component {
   render() {

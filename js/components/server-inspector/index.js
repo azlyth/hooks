@@ -5,7 +5,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import { Container, Content, Spinner } from 'native-base';
+import { Card, CardItem, Container, Content, Spinner } from 'native-base';
 import { connect } from 'react-redux';
 
 import styles from './styles.js';
@@ -16,15 +16,19 @@ function ActionList(props) {
     return (
       <View>
         {props.actions.map((action, index) =>
-          <Text key={index}>{action}</Text>
+          <Card key={index} style={{margin: 15}}>
+            <CardItem>
+              <Text style={styles.contentText}>{action}</Text>
+            </CardItem>
+          </Card>
         )}
       </View>
     );
   } else {
     return (
-      <View>
-        <Text>Gathering actions...</Text>
+      <View style={styles.wait}>
         <Spinner color="blue" />
+        <Text style={styles.contentText}>Gathering actions...</Text>
       </View>
     );
   }
@@ -70,10 +74,8 @@ class ServerInspector extends Component {
         <Content>
           <View style={styles.body}>
             <Text style={styles.title}>{server.user}@{server.host}</Text>
-            <View style={styles.content}>
-              <ActionList actions={actions} />
-            </View>
           </View>
+          <ActionList actions={actions} />
         </Content>
       </Container>
     );

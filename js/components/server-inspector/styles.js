@@ -13,15 +13,25 @@ const styles = StyleSheet.create({
   body: {
     flex: 1,
     alignItems: 'center',
-    height: screenHeight,
   },
 
   title: {
-    marginTop: 30,
+    margin: 30,
     fontSize: 35,
+    color: 'black',
   },
 
-  content: {
+  actionCard: {
+    margin: 15,
+  },
+
+  contentText: {
+    textAlign: 'center',
+    fontSize: 25,
+    color: 'black',
+  },
+
+  wait: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',

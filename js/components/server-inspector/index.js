@@ -7,18 +7,20 @@ import {
 } from 'react-native';
 import { Card, CardItem, Container, Content, Spinner } from 'native-base';
 import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux';
 
 import styles from './styles.js';
 
 
-function ActionList(props) {
-  if (props.actions.length > 0) {
+function HookList(props) {
+  server = props.server;
+  if (props.hooks.length > 0) {
     return (
       <View>
-        {props.actions.map((action, index) =>
+        {props.hooks.map((hook, index) =>
           <Card key={index} style={{margin: 15}}>
-            <CardItem>
-              <Text style={styles.contentText}>{action}</Text>
+            <CardItem button onPress={() => Actions.executeHook({hook, server})}>
+              <Text style={styles.contentText}>{hook}</Text>
             </CardItem>
           </Card>
         )}
@@ -28,14 +30,15 @@ function ActionList(props) {
     return (
       <View style={styles.wait}>
         <Spinner color="blue" />
-        <Text style={styles.contentText}>Gathering actions...</Text>
+        <Text style={styles.contentText}>Finding hooks...</Text>
       </View>
     );
   }
 }
 
-ActionList.propTypes = {
-  actions: PropTypes.array,
+HookList.propTypes = {
+  hooks: PropTypes.array,
+  server: PropTypes.object,
 };
 
 
@@ -47,26 +50,26 @@ class ServerInspector extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {actions: []};
+    this.state = {hooks: []};
   }
 
   componentDidMount() {
-    InteractionManager.runAfterInteractions(() => this.gatherActions());
+    InteractionManager.runAfterInteractions(() => this.findHooks());
   }
 
-  gatherActions() {
+  findHooks() {
     command = "ls -a .hooks-app/hooks";
 
     NativeModules.SSH.execute(this.props.server, command, (result) => {
-      validAction = (action) => !(['.', '..'].includes(action));
-      this.setState({actions: result.filter(validAction)})
+      validHook = (hook) => !(['.', '..'].includes(hook));
+      this.setState({hooks: result.filter(validHook)})
     }, (errorMessage) => {
       console.log(errorMessage);
     });
   }
 
   render() {
-    actions = this.state.actions;
+    hooks = this.state.hooks;
     server = this.props.server;
 
     return (
@@ -75,7 +78,7 @@ class ServerInspector extends Component {
           <View style={styles.body}>
             <Text style={styles.title}>{server.user}@{server.host}</Text>
           </View>
-          <ActionList actions={actions} />
+          <HookList hooks={hooks} server={this.props.server}/>
         </Content>
       </Container>
     );

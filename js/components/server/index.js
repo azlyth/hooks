@@ -42,7 +42,7 @@ HookList.propTypes = {
 };
 
 
-class ServerInspector extends Component {
+class Server extends Component {
 
   static propTypes = {
     server: PropTypes.object,
@@ -90,4 +90,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(ServerInspector);
+export default connect(mapStateToProps)(Server);

@@ -28,7 +28,7 @@ class ServerList extends Component {
           <Text style={styles.title}>Servers</Text>
           {this.props.servers.map((server, index) =>
             <Card key={index} style={styles.serverCard}>
-              <CardItem button style={styles.serverCardItem} onPress={() => Actions.inspectServer({server})}>
+              <CardItem button style={styles.serverCardItem} onPress={() => Actions.useServer({server})}>
                 <Text style={styles.serverText}>{server.user}@{server.host}</Text>
               </CardItem>
             </Card>

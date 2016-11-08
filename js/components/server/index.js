@@ -5,10 +5,10 @@ import {
   Text,
   View,
 } from 'react-native';
-import { Card, CardItem, Container, Content, Spinner } from 'native-base';
+import { Button, Card, CardItem, Container, Content, Spinner } from 'native-base';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-
+import { removeServer } from '../../actions/server';
 import styles from './styles.js';
 
 
@@ -29,7 +29,7 @@ function HookList(props) {
   } else {
     return (
       <View style={styles.wait}>
-        <Spinner color="blue" />
+        <Spinner style={styles.spinner} color="blue" />
         <Text style={styles.contentText}>Finding hooks...</Text>
       </View>
     );
@@ -46,6 +46,7 @@ class Server extends Component {
 
   static propTypes = {
     server: PropTypes.object,
+    removeServer: PropTypes.func,
   };
 
   constructor(props) {
@@ -68,6 +69,11 @@ class Server extends Component {
     });
   }
 
+  removeSelf() {
+    this.props.removeServer(this.props.server);
+    Actions.pop();
+  }
+
   render() {
     hooks = this.state.hooks;
     server = this.props.server;
@@ -77,17 +83,27 @@ class Server extends Component {
         <Content>
           <View style={styles.body}>
             <Text style={styles.title}>{server.user}@{server.host}</Text>
+            <View style={styles.buttonRow}>
+              <Button style={styles.button} large bordered>Update</Button>
+              <Button style={styles.button} onPress={() => this.removeSelf()}danger large bordered>Remove</Button>
+            </View>
           </View>
-          <HookList hooks={hooks} server={this.props.server}/>
+          <HookList hooks={hooks} server={server}/>
         </Content>
       </Container>
     );
   }
 }
 
-function mapStateToProps(state) {
+function mapStore(state) {
   return {
   };
 }
 
-export default connect(mapStateToProps)(Server);
+function mapDispatch(dispatch) {
+  return {
+    removeServer: server => dispatch(removeServer(server))
+  };
+}
+
+export default connect(mapStore, mapDispatch)(Server);

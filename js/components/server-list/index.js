@@ -48,7 +48,7 @@ class ServerList extends Component {
 
 function mapStateToProps(state) {
   return {
-    servers: state.servers
+    servers: state.server.list,
   };
 }
 

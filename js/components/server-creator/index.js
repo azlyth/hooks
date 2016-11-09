@@ -10,6 +10,7 @@ import { Actions } from 'react-native-router-flux';
 import styles from './styles';
 import { addServer } from '../../actions/server';
 import Form from '../form';
+import Models from '../../models';
 
 
 class ServerCreator extends Component {
@@ -28,21 +29,13 @@ class ServerCreator extends Component {
     Actions.pop();
   }
 
-  serverFields() {
-    return [
-      { name: 'user' },
-      { name: 'host' },
-      { name: 'password', secure: true },
-    ];
-  }
-
   render() {
     return (
       <Container>
         <Content>
           <Form ref="serverForm"
             title="New Server"
-            fields={this.serverFields()}
+            fields={Models.server}
             submit={() => this.addServer()}
           />
         </Content>

@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 
 import styles from './styles';
+import { capitalize } from '../../utils';
 import { addServer } from '../../actions/server';
 
 
@@ -27,6 +28,14 @@ class ServerCreator extends Component {
     Actions.pop();
   }
 
+  serverFields() {
+    return [
+      { name: 'user' },
+      { name: 'host' },
+      { name: 'password', secure: true },
+    ];
+  }
+
   render() {
     return (
       <Container>
@@ -34,23 +43,14 @@ class ServerCreator extends Component {
           <View style={styles.content}>
             <Text style={styles.title}>New Server</Text>
             <View>
-              <InputGroup style={styles.inputGroup} borderType="regular">
+              {this.serverFields().map((field) =>
+              <InputGroup key={field.name} style={styles.inputGroup} borderType="regular">
                 <Input style={styles.input}
-                  placeholder="User"
-                  onChangeText={(user) => this.setState({user})} />
+                  placeholder={capitalize(field.name)}
+                  onChangeText={value => this.setState({ [field.name]: value })}
+                  secureTextEntry={field.secure}/>
               </InputGroup>
-              <InputGroup style={styles.inputGroup} borderType="regular">
-                <Input
-                  style={styles.input}
-                  placeholder="Host"
-                  onChangeText={(host) => this.setState({host})} />
-              </InputGroup>
-              <InputGroup style={styles.inputGroup} borderType="regular">
-                <Input style={styles.input}
-                  placeholder="Password"
-                  onChangeText={(password) => this.setState({password})}
-                  secureTextEntry />
-              </InputGroup>
+              )}
             </View>
             <Button style={styles.button}
               bordered large block

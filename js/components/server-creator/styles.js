@@ -6,7 +6,6 @@ import {
 
 const {
   height: screenHeight,
-  width:  screenWidth,
 } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
@@ -20,18 +19,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 35,
     color: 'black',
-  },
-
-  inputGroup: {
-    margin: 10,
-    height: 70,
-    width: screenWidth - 50,
-  },
-
-  input: {
-    textAlign: 'center',
-    fontSize: 25,
-    height: 60,
   },
 
   button: {

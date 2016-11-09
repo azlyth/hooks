@@ -3,13 +3,13 @@ import {
   Text,
   View,
 } from 'react-native';
-import { Button, Container, Content, Input, InputGroup } from 'native-base';
+import { Button, Container, Content } from 'native-base';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 
 import styles from './styles';
-import { capitalize } from '../../utils';
 import { addServer } from '../../actions/server';
+import Form from '../form';
 
 
 class ServerCreator extends Component {
@@ -24,7 +24,7 @@ class ServerCreator extends Component {
   }
 
   addServer() {
-    this.props.addServer(this.state);
+    this.props.addServer(this.refs.serverForm.state);
     Actions.pop();
   }
 
@@ -42,16 +42,7 @@ class ServerCreator extends Component {
         <Content>
           <View style={styles.content}>
             <Text style={styles.title}>New Server</Text>
-            <View>
-              {this.serverFields().map((field) =>
-              <InputGroup key={field.name} style={styles.inputGroup} borderType="regular">
-                <Input style={styles.input}
-                  placeholder={capitalize(field.name)}
-                  onChangeText={value => this.setState({ [field.name]: value })}
-                  secureTextEntry={field.secure}/>
-              </InputGroup>
-              )}
-            </View>
+            <Form ref="serverForm" fields={this.serverFields()} />
             <Button style={styles.button}
               bordered large block
               onPress={() => this.addServer()}>Save</Button>

@@ -1,4 +1,4 @@
-export const ADD_SERVER = 'ADD_SERVER';
+export const ADD_SERVER    = 'ADD_SERVER';
 export const REMOVE_SERVER = 'REMOVE_SERVER';
 export const UPDATE_SERVER = 'UPDATE_SERVER';
 

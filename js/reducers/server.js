@@ -19,7 +19,7 @@ export default function(currentState = initialState, action) {
       return {
         ...currentState,
         list: [...currentState.list, newServer],
-        lastID: newId,
+        lastAssignedId: newId,
       };
 
     case REMOVE_SERVER:

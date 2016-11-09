@@ -69,9 +69,18 @@ class Server extends Component {
     });
   }
 
+  updateSelf() {
+    Actions.updateServer({server: this.props.server});
+  }
+
   removeSelf() {
     this.props.removeServer(this.props.server);
     Actions.pop();
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    // Only re-render if a server still exists. It may not if a remove just happened.
+    return Boolean(nextProps.server);
   }
 
   render() {
@@ -84,8 +93,8 @@ class Server extends Component {
           <View style={styles.body}>
             <Text style={styles.title}>{server.user}@{server.host}</Text>
             <View style={styles.buttonRow}>
-              <Button style={styles.button} large bordered>Update</Button>
-              <Button style={styles.button} onPress={() => this.removeSelf()}danger large bordered>Remove</Button>
+              <Button style={styles.button} onPress={() => this.updateSelf()} large bordered>Update</Button>
+              <Button style={styles.button} onPress={() => this.removeSelf()} danger large bordered>Remove</Button>
             </View>
           </View>
           <HookList hooks={hooks} server={server}/>
@@ -95,8 +104,9 @@ class Server extends Component {
   }
 }
 
-function mapStore(state) {
+function mapState(state, ownProps) {
   return {
+    server: state.server.list.find(server => server.id == ownProps.server.id)
   };
 }
 
@@ -106,4 +116,4 @@ function mapDispatch(dispatch) {
   };
 }
 
-export default connect(mapStore, mapDispatch)(Server);
+export default connect(mapState, mapDispatch)(Server);

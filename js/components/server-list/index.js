@@ -46,10 +46,10 @@ class ServerList extends Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapState(state) {
   return {
     servers: state.server.list,
   };
 }
 
-export default connect(mapStateToProps)(ServerList);
+export default connect(mapState)(ServerList);

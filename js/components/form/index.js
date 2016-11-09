@@ -9,13 +9,14 @@ class Form extends Component {
 
   static propTypes = {
     title: PropTypes.string,
+    initialState: PropTypes.object,
     fields: PropTypes.arrayOf(PropTypes.object),
     submit: PropTypes.func,
   };
 
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = this.props.initialState || {};
   }
 
   render() {
@@ -27,6 +28,7 @@ class Form extends Component {
             <InputGroup key={field.name} style={styles.inputGroup} borderType="regular">
               <Input style={styles.input}
                 placeholder={capitalize(field.name)}
+                defaultValue={this.state[field.name]}
                 onChangeText={value => this.setState({ [field.name]: value })}
                 secureTextEntry={field.secure}/>
             </InputGroup>

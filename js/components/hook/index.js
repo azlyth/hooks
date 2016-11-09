@@ -70,8 +70,8 @@ class Hook extends Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapState(state) {
   return {};
 }
 
-export default connect(mapStateToProps)(Hook);
+export default connect(mapState)(Hook);

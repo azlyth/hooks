@@ -40,13 +40,11 @@ class ServerCreator extends Component {
     return (
       <Container>
         <Content>
-          <View style={styles.content}>
-            <Text style={styles.title}>New Server</Text>
-            <Form ref="serverForm" fields={this.serverFields()} />
-            <Button style={styles.button}
-              bordered large block
-              onPress={() => this.addServer()}>Save</Button>
-          </View>
+          <Form ref="serverForm"
+            title="New Server"
+            fields={this.serverFields()}
+            submit={() => this.addServer()}
+          />
         </Content>
       </Container>
     );

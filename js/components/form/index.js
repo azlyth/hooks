@@ -20,6 +20,10 @@ class Form extends Component {
     this.state = this.props.initialState || {};
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return false;
+  }
+
   render() {
     return (
       <View style={styles.content}>

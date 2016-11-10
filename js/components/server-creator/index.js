@@ -26,8 +26,7 @@ class ServerCreator extends Component {
           <Form ref="serverForm"
             title="New Server"
             fields={Models.server}
-            submit={() => this.addServer()}
-          />
+            submit={() => this.addServer()} />
         </Content>
       </Container>
     );

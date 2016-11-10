@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 import { Router, Scene } from 'react-native-router-flux';
 
 import store from './store';
+import AppPassword from './components/app-password';
 import ServerCreator from './components/server-creator';
 import ServerEditor from './components/server-editor';
 import ServerList from './components/server-list';
@@ -17,7 +18,8 @@ class App extends Component {
 
         <Router hideNavBar={true}>
           <Scene key="root">
-            <Scene key="listServers" component={ServerList} title="Server List" initial={true} />
+            <Scene key="password" component={AppPassword} title="App Password" initial={true} />
+            <Scene key="listServers" component={ServerList} title="Server List" />
             <Scene key="createServer" component={ServerCreator} title="Create Server" />
             <Scene key="updateServer" component={ServerEditor} title="Update Server" />
             <Scene key="useServer" component={Server} title="Use Server" />

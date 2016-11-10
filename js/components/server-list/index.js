@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import {
-  Alert,
   Text,
   View,
 } from 'react-native';

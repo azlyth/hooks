@@ -12,6 +12,7 @@ class Form extends Component {
     initialState: PropTypes.object,
     fields: PropTypes.arrayOf(PropTypes.object),
     submit: PropTypes.func,
+    submitText: PropTypes.string,
   };
 
   constructor(props) {
@@ -36,7 +37,7 @@ class Form extends Component {
         </View>
         <Button style={styles.button}
           bordered large block
-          onPress={() => this.props.submit()}>Save</Button>
+          onPress={() => this.props.submit()}>{this.props.submitText || "Save"}</Button>
       </View>
     );
   }

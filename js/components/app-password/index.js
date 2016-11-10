@@ -3,18 +3,24 @@ import { Container, Content } from 'native-base';
 import { Actions, ActionConst } from 'react-native-router-flux';
 import Form from '../form';
 import { unlockStore } from '../../store';
+import merge from 'lodash/merge';
 
 import { AsyncStorage } from 'react-native';
 
 
 class AppPassword extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {fields: this.passwordField()};
+  }
+
   attemptToUnlock() {
     unlockStore(
       this.refs.passwordForm.state.password
     ).then(
-      this.startApp,
-      this.incorrectPassword
+      () => this.startApp(),
+      () => this.incorrectPassword(),
     );
   }
 
@@ -23,6 +29,19 @@ class AppPassword extends Component {
   }
 
   incorrectPassword() {
+    this.setState(merge(this.state, {
+      fields: {
+        password: {
+          error: 'Incorrect password.'
+        }
+      }
+    }));
+  }
+
+  passwordField() {
+    return {
+      'password': { secure: true }
+    };
   }
 
   render() {
@@ -31,7 +50,7 @@ class AppPassword extends Component {
         <Content>
           <Form ref="passwordForm"
             title="Hooks"
-            fields={[{name: 'password', secure: true}]}
+            fields={this.state.fields}
             submitText={"Unlock"}
             submit={() => this.attemptToUnlock()} />
         </Content>

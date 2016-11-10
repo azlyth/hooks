@@ -22,8 +22,11 @@ const styles = StyleSheet.create({
     color: 'black',
   },
 
+  fieldContainer: {
+    marginTop: 20,
+  },
+
   inputGroup: {
-    margin: 10,
     height: 70,
     width: screenWidth - 50,
   },
@@ -32,6 +35,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 25,
     height: 60,
+  },
+
+  errorText: {
+    textAlign: 'center',
+    fontSize: 15,
+    color: '#d9534f',
   },
 
   button: {

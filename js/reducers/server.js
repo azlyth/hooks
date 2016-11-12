@@ -10,7 +10,7 @@ const initialState = {
   lastAssignedId: 0,
 };
 
-export default function(currentState = initialState, action) {
+export default (currentState = initialState, action) => {
   switch (action.type) {
 
     case ADD_SERVER:

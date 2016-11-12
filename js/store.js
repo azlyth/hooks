@@ -8,13 +8,13 @@ import reducer from './reducers';
 const store = createStore(reducer, undefined, autoRehydrate());
 
 export function unlockStore(password) {
-  return new Promise(function(resolve, reject) {
+  return new Promise((resolve, reject) => {
 
     encryptor = createEncryptor({secretKey: password})
     config = {storage: AsyncStorage, transforms: [encryptor]}
 
     // Check if the password provided is correct
-    getStoredState(config).then(function(state) {
+    getStoredState(config).then((state) => {
       if (Object.values(state).includes(null)) {
         reject();
       } else {

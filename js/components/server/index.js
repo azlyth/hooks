@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import {
+  BackAndroid,
   InteractionManager,
   NativeModules,
   Text,
@@ -9,6 +10,7 @@ import { Button, Card, CardItem, Container, Content, Spinner } from 'native-base
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { removeServer } from '../../actions/server';
+import { cancelable } from '../../utils';
 import styles from './styles.js';
 
 
@@ -49,15 +51,32 @@ class Server extends Component {
   }
 
   findHooks() {
-    command = "ls -a .hooks-app/hooks";
+    // Create cancelable callbacks
+    [{ success, error }, cancelAll ] = cancelable({
+      success: (result) => {
+        validHook = (hook) => !(['.', '..'].includes(hook));
+        this.setState({hooks: result.filter(validHook)})
+      },
+      error: (errorMessage) => {
+        console.log(errorMessage);
+        this.setState({error: errorMessage});
+      }
+    })
+    this.cancelCallbacks = () => {
+      cancelAll();
+      return false;
+    }
 
-    NativeModules.SSH.execute(this.props.server, command, (result) => {
-      validHook = (hook) => !(['.', '..'].includes(hook));
-      this.setState({hooks: result.filter(validHook)})
-    }, (errorMessage) => {
-      console.log(errorMessage);
-      this.setState({error: errorMessage});
-    });
+    // Get the hooks from the server
+    command = "ls .hooks-app/hooks";
+    NativeModules.SSH.execute(this.props.server, command, success.function, error.function);
+
+    // Cancel the callbacks if back is pressed
+    BackAndroid.addEventListener('hardwareBackPress', this.cancelCallbacks);
+  }
+
+  componentWillUnmount() {
+    BackAndroid.removeEventListener('hardwareBackPress', this.cancelCallbacks);
   }
 
   updateSelf() {

@@ -31,33 +31,38 @@ public class SSHModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void execute(ReadableMap config, String command, Callback success, Callback error) {
-    try {
-      // Get an SSH session ready
-      Session session = this.connect(config);
+  public void execute(final ReadableMap config, final String command, final Callback success, final Callback error) {
 
-      // Execute the command and prepare to read the output
-      ChannelExec channelExec = (ChannelExec)session.openChannel("exec");
-      InputStream in = channelExec.getInputStream();
-      channelExec.setCommand(command);
-      channelExec.connect();
+    new Thread(new Runnable() {
+      public void run() {
+        try {
+          // Get an SSH session ready
+          Session session = SSHModule.connect(config);
 
-      // Put the result into an JS-readable array
-      String line;
-      BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-      WritableNativeArray filenames = new WritableNativeArray();
-      while ((line = reader.readLine()) != null) {
-        filenames.pushString(line);
+          // Execute the command and prepare to read the output
+          ChannelExec channelExec = (ChannelExec)session.openChannel("exec");
+          InputStream in = channelExec.getInputStream();
+          channelExec.setCommand(command);
+          channelExec.connect();
+
+          // Put the result into an JS-readable array
+          String line;
+          BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+          WritableNativeArray filenames = new WritableNativeArray();
+          while ((line = reader.readLine()) != null) {
+            filenames.pushString(line);
+          }
+
+          // Pass the array of filenames back to JS
+          success.invoke(filenames);
+        } catch (Exception e) {
+          error.invoke("Error: " + e.getMessage());
+        }
       }
-
-      // Pass the array of filenames back to JS
-      success.invoke(filenames);
-    } catch (Exception e) {
-      error.invoke("Error: " + e.getMessage());
-    }
+    }).start();
   }
 
-  private Session connect(ReadableMap config) throws JSchException {
+  public static Session connect(ReadableMap config) throws JSchException {
     // Prepare the SSH session with the provided credentials
     JSch jsch = new JSch();
     Session session = jsch.getSession(config.getString("user"), config.getString("host"), 22);

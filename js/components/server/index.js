@@ -13,27 +13,17 @@ import styles from './styles.js';
 
 
 function HookList(props) {
-  server = props.server;
-  if (props.hooks.length > 0) {
-    return (
-      <View>
-        {props.hooks.map((hook, index) =>
-          <Card key={index} style={{margin: 15}}>
-            <CardItem button onPress={() => Actions.executeHook({hook, server})}>
-              <Text style={styles.contentText}>{hook}</Text>
-            </CardItem>
-          </Card>
-        )}
-      </View>
-    );
-  } else {
-    return (
-      <View style={styles.wait}>
-        <Spinner style={styles.spinner} color="blue" />
-        <Text style={styles.contentText}>Finding hooks...</Text>
-      </View>
-    );
-  }
+  return (
+    <View>
+      {props.hooks.map((hook, index) =>
+        <Card key={index} style={{margin: 15}}>
+          <CardItem button onPress={() => Actions.executeHook({hook, server: props.server})}>
+            <Text style={styles.contentText}>{hook}</Text>
+          </CardItem>
+        </Card>
+      )}
+    </View>
+  );
 }
 
 HookList.propTypes = {
@@ -51,7 +41,7 @@ class Server extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {hooks: []};
+    this.state = {};
   }
 
   componentDidMount() {
@@ -66,6 +56,7 @@ class Server extends Component {
       this.setState({hooks: result.filter(validHook)})
     }, (errorMessage) => {
       console.log(errorMessage);
+      this.setState({error: errorMessage});
     });
   }
 
@@ -83,21 +74,40 @@ class Server extends Component {
     return Boolean(nextProps.server);
   }
 
-  render() {
-    hooks = this.state.hooks;
-    server = this.props.server;
+  renderBody() {
+    errorExists = this.state.error !== undefined;
+    stillConnecting = this.state.hooks === undefined;
 
+    if (errorExists) {
+      return (
+        <View style={styles.wait}>
+          <Text style={styles.error}>{this.state.error}</Text>
+        </View>
+      );
+    } else if (stillConnecting) {
+      return (
+        <View style={styles.wait}>
+          <Spinner style={styles.spinner} color="blue" />
+          <Text style={styles.contentText}>Finding hooks...</Text>
+        </View>
+      );
+    } else {
+      return <HookList hooks={this.state.hooks} server={this.props.server}/>;
+    }
+  }
+
+  render() {
     return (
       <Container>
         <Content>
           <View style={styles.body}>
-            <Text style={styles.title}>{server.user}@{server.host}</Text>
+            <Text style={styles.title}>{this.props.server.user}@{this.props.server.host}</Text>
             <View style={styles.buttonRow}>
               <Button style={styles.button} onPress={() => this.updateSelf()} large bordered>Update</Button>
               <Button style={styles.button} onPress={() => this.removeSelf()} danger large bordered>Remove</Button>
             </View>
           </View>
-          <HookList hooks={hooks} server={server}/>
+          {this.renderBody()}
         </Content>
       </Container>
     );

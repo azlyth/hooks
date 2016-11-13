@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { InteractionManager, NativeModules, Text, View } from 'react-native';
 import { Container, Content, Spinner } from 'native-base';
 import { connect } from 'react-redux';
-
+import cancelableCallbacks from '../cancelable-callbacks';
 import styles from './styles.js';
 
 
@@ -36,6 +36,7 @@ class Hook extends Component {
   static propTypes = {
     hook: PropTypes.string,
     server: PropTypes.object,
+    cancelOnBack: PropTypes.func,
   };
 
   constructor(props) {
@@ -50,10 +51,11 @@ class Hook extends Component {
   executeHook() {
     command = 'bash .hooks-app/hooks/' + this.props.hook;
 
-    NativeModules.SSH.execute(this.props.server, command, (result) => {
+    promise = NativeModules.SSH.execute(this.props.server, command)
+    this.props.cancelOnBack(promise, (result) => {
       this.setState({result})
-    }, (errorMessage) => {
-      console.log(errorMessage);
+    }, (error) => {
+      console.log(error.message);
     });
   }
 
@@ -74,4 +76,4 @@ function mapState(state) {
   return {};
 }
 
-export default connect(mapState)(Hook);
+export default connect(mapState)(cancelableCallbacks(Hook));

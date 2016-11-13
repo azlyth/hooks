@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "react-native start",
-    "test": "jest"
+    "test": "jest",
+    "install-apk": "cd android && ./gradlew assembleRelease && adb install -r app/build/outputs/apk/app-release.apk"
   },
   "dependencies": {
     "lodash": "^4.16.6",

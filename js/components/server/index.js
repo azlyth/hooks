@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import {
-  BackAndroid,
   InteractionManager,
   NativeModules,
   Text,
@@ -10,7 +9,7 @@ import { Button, Card, CardItem, Container, Content, Spinner } from 'native-base
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { removeServer } from '../../actions/server';
-import { cancelable } from '../../utils';
+import cancelableCallbacks from '../cancelable-callbacks';
 import styles from './styles.js';
 
 
@@ -39,6 +38,7 @@ class Server extends Component {
   static propTypes = {
     server: PropTypes.object,
     removeServer: PropTypes.func,
+    cancelOnBack: PropTypes.func,
   };
 
   constructor(props) {
@@ -51,32 +51,20 @@ class Server extends Component {
   }
 
   findHooks() {
-    // Create cancelable callbacks
-    [{ success, error }, cancelAll ] = cancelable({
-      success: (result) => {
-        validHook = (hook) => !(['.', '..'].includes(hook));
-        this.setState({hooks: result.filter(validHook)})
-      },
-      error: (errorMessage) => {
-        console.log(errorMessage);
-        this.setState({error: errorMessage});
-      }
-    })
-    this.cancelCallbacks = () => {
-      cancelAll();
-      return false;
-    }
-
     // Get the hooks from the server
     command = "ls .hooks-app/hooks";
-    NativeModules.SSH.execute(this.props.server, command, success.function, error.function);
+    promise = NativeModules.SSH.execute(this.props.server, command);
 
-    // Cancel the callbacks if back is pressed
-    BackAndroid.addEventListener('hardwareBackPress', this.cancelCallbacks);
-  }
-
-  componentWillUnmount() {
-    BackAndroid.removeEventListener('hardwareBackPress', this.cancelCallbacks);
+    // Attach the callbacks to a promise that will cancel them on a back press
+    this.props.cancelOnBack(promise, (result) => {
+      console.log("Success!");
+      validHook = (hook) => !(['.', '..'].includes(hook));
+      this.setState({hooks: result.filter(validHook)})
+    }, (error) => {
+      message = 'Error: ' + error.message;
+      console.log(message);
+      this.setState({error: message});
+    })
   }
 
   updateSelf() {
@@ -145,4 +133,4 @@ function mapDispatch(dispatch) {
   };
 }
 
-export default connect(mapState, mapDispatch)(Server);
+export default connect(mapState, mapDispatch)(cancelableCallbacks(Server));

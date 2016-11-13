@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.util.Properties;
 import java.util.Vector;
 
-import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -31,7 +31,7 @@ public class SSHModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void execute(final ReadableMap config, final String command, final Callback success, final Callback error) {
+  public void execute(final ReadableMap config, final String command, final Promise promise) {
 
     new Thread(new Runnable() {
       public void run() {
@@ -54,9 +54,9 @@ public class SSHModule extends ReactContextBaseJavaModule {
           }
 
           // Pass the array of filenames back to JS
-          success.invoke(filenames);
+          promise.resolve(filenames);
         } catch (Exception e) {
-          error.invoke("Error: " + e.getMessage());
+          promise.reject("ERROR", e.getMessage());
         }
       }
     }).start();

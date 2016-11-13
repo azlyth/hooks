@@ -8,7 +8,7 @@ export function cancelable(callbacks) {
     return {
       ...memo,
       [name]: {
-        function: (...args) => { if (!canceled) callbacks[name](...args) },
+        func: (...args) => { if (!canceled) callbacks[name](...args) },
         canceled: () => canceled,
         cancel: () => canceled = true,
       }

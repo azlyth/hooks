@@ -61,7 +61,7 @@ class Server extends Component {
 
   findHooks() {
     // Get the hooks from the server
-    command = "ls .hooks-app/hooks";
+    command = "find .hooks-app/hooks/ -type f -perm -111 | sed 's/^.hooks-app\\\/hooks\\\///'";
     promise = NativeModules.SSH.execute(this.props.server, command);
 
     // Attach the callbacks to a promise that will cancel them on a back press

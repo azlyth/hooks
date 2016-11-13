@@ -15,7 +15,8 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    margin: 30,
+    margin: 25,
+    marginTop: 15,
     fontSize: 35,
     color: 'black',
   },
@@ -29,11 +30,7 @@ const styles = StyleSheet.create({
   button: {
     marginRight: 10,
     marginLeft: 10,
-    width: (screenWidth / 2) - 25,
-  },
-
-  actionCard: {
-    margin: 15,
+    width: (screenWidth / 2) - 35,
   },
 
   contentText: {

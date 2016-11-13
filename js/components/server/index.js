@@ -14,17 +14,26 @@ import styles from './styles.js';
 
 
 function HookList(props) {
-  return (
-    <View>
-      {props.hooks.map((hook, index) =>
-        <Card key={index} style={{margin: 15}}>
-          <CardItem button onPress={() => Actions.executeHook({hook, server: props.server})}>
-            <Text style={styles.contentText}>{hook}</Text>
-          </CardItem>
-        </Card>
-      )}
-    </View>
-  );
+  if (props.hooks.length === 0) {
+    let message = "\nThere aren't any hooks on this server.\n\n\nAdd executable files to\n\n~/.hooks-app/hooks\n\nand they'll be listed here."
+    return (
+      <View>
+        <Text style={styles.contentText}>{message}</Text>
+      </View>
+    );
+  } else {
+    return (
+      <View>
+        {props.hooks.map((hook, index) =>
+          <Card key={index} style={{margin: 15}}>
+            <CardItem button onPress={() => Actions.executeHook({hook, server: props.server})}>
+              <Text style={styles.contentText}>{hook}</Text>
+            </CardItem>
+          </Card>
+        )}
+      </View>
+    );
+  }
 }
 
 HookList.propTypes = {
@@ -105,7 +114,7 @@ class Server extends Component {
   render() {
     return (
       <Container>
-        <Content>
+        <Content style={{padding: 15}}>
           <View style={styles.body}>
             <Text style={styles.title}>{this.props.server.user}@{this.props.server.host}</Text>
             <View style={styles.buttonRow}>

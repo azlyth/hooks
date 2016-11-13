@@ -27,7 +27,7 @@ class ServerEditor extends Component {
           <Form ref="serverForm"
             title="Update Server"
             fields={Models.server}
-            initialState={this.props.server}
+            initialValues={this.props.server}
             submit={() => this.updateServer()}
           />
         </Content>

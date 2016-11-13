@@ -3,14 +3,13 @@ import { Text, View } from 'react-native';
 import { Button, Input, InputGroup } from 'native-base';
 import styles from './styles.js';
 import { capitalize } from '../../utils';
-import isEqual from 'lodash/isEqual';
 
 
 class Form extends Component {
 
   static propTypes = {
     title: PropTypes.string,
-    initialState: PropTypes.object,
+    initialValues: PropTypes.object,
     fields: PropTypes.object,
     submit: PropTypes.func,
     submitText: PropTypes.string,
@@ -18,7 +17,8 @@ class Form extends Component {
 
   constructor(props) {
     super(props);
-    this.state = this.props.initialState || {};
+    this.state = this.props.initialValues || {};
+    this.submit = this.submit.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -31,6 +31,17 @@ class Form extends Component {
     return false;
   }
 
+  allFieldsEntered() {
+    fieldEntered = field => Boolean(this.state[field]);
+    return Object.keys(this.props.fields).every(fieldEntered);
+  }
+
+  submit() {
+    if (this.allFieldsEntered()) {
+      this.props.submit();
+    }
+  }
+
   createField(name, config) {
     return (
       <View key={name} style={styles.fieldContainer}>
@@ -39,7 +50,7 @@ class Form extends Component {
             placeholder={capitalize(name)}
             defaultValue={this.state[name]}
             onChangeText={value => this.setState({ [name]: value })}
-            secureTextEntry={config.secure}/>
+            secureTextEntry={config.secure} />
         </InputGroup>
         <Text style={styles.errorText}>{config.error || ' '}</Text>
       </View>
@@ -55,7 +66,7 @@ class Form extends Component {
         </View>
         <Button style={styles.button}
           bordered large block
-          onPress={() => this.props.submit()}>{this.props.submitText || "Save"}</Button>
+          onPress={this.submit}>{this.props.submitText || "Save"}</Button>
       </View>
     );
   }

@@ -57,7 +57,6 @@ class Server extends Component {
 
     // Attach the callbacks to a promise that will cancel them on a back press
     this.props.cancelOnBack(promise, (result) => {
-      console.log("Success!");
       validHook = (hook) => !(['.', '..'].includes(hook));
       this.setState({hooks: result.filter(validHook)})
     }, (error) => {

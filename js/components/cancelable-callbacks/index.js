@@ -33,7 +33,6 @@ cancelableCallbacks = (WrappedComponent) => {
 
       // Attach the callbacks to the promise
       promise.then(success.func, error.func);
-      console.log("Attached to promise!");
     }
 
     render() {

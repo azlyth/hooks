@@ -5,7 +5,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import { Button, Card, CardItem, Container, Content, Spinner } from 'native-base';
+import { Button, Card, CardItem, Spinner } from 'native-base';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { removeServer } from '../../actions/server';
@@ -113,18 +113,16 @@ class Server extends Component {
 
   render() {
     return (
-      <Container>
-        <Content style={{padding: 15}}>
-          <View style={styles.body}>
-            <Text style={styles.title}>{this.props.server.user}@{this.props.server.host}</Text>
-            <View style={styles.buttonRow}>
-              <Button style={styles.button} onPress={() => this.updateSelf()} large bordered>Update</Button>
-              <Button style={styles.button} onPress={() => this.removeSelf()} danger large bordered>Remove</Button>
-            </View>
+      <View style={styles.container}>
+        <View style={styles.body}>
+          <Text style={styles.title}>{this.props.server.user}@{this.props.server.host}</Text>
+          <View style={styles.buttonRow}>
+            <Button style={styles.button} onPress={() => this.updateSelf()} large bordered>Update</Button>
+            <Button style={styles.button} onPress={() => this.removeSelf()} danger large bordered>Remove</Button>
           </View>
-          {this.renderBody()}
-        </Content>
-      </Container>
+        </View>
+        {this.renderBody()}
+      </View>
     );
   }
 }

@@ -9,6 +9,10 @@ const {
 } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
+  container: {
+    margin: 10,
+  },
+
   body: {
     flex: 1,
     alignItems: 'center',
@@ -24,12 +28,12 @@ const styles = StyleSheet.create({
   buttonRow: {
     flex: 1,
     flexDirection: 'row',
-    marginBottom: 25,
+    justifyContent: 'space-between',
+    width: screenWidth - 50,
+    marginBottom: 15,
   },
 
   button: {
-    marginRight: 10,
-    marginLeft: 10,
     width: (screenWidth / 2) - 35,
   },
 

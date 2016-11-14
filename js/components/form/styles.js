@@ -5,14 +5,12 @@ import {
 
 
 const {
-  height: screenHeight,
   width:  screenWidth,
 } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   content: {
     flex: 1,
-    height: screenHeight,
     alignItems: 'center',
     justifyContent: 'space-around'
   },

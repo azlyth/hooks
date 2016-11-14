@@ -3,7 +3,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import { Card, CardItem, Container, Content, Icon } from 'native-base';
+import { Card, CardItem, Icon } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 
@@ -22,25 +22,23 @@ class ServerList extends Component {
 
   render() {
     return (
-      <Container>
-        <Content>
-          <Text style={styles.title}>Servers</Text>
-          {this.props.servers.map((server, index) =>
-            <Card key={index} style={styles.serverCard}>
-              <CardItem button style={styles.serverCardItem} onPress={() => Actions.useServer({server})}>
-                <Text style={styles.serverText}>{server.user}@{server.host}</Text>
-              </CardItem>
-            </Card>
-          )}
-          <Card style={styles.serverCard}>
-            <CardItem button style={styles.serverCardItem} onPress={Actions.createServer}>
-              <View>
-                <Icon name="md-add" />
-              </View>
+      <View>
+        <Text style={styles.title}>Servers</Text>
+        {this.props.servers.map((server, index) =>
+          <Card key={index} style={styles.serverCard}>
+            <CardItem button style={styles.serverCardItem} onPress={() => Actions.useServer({server})}>
+              <Text style={styles.serverText}>{server.user}@{server.host}</Text>
             </CardItem>
           </Card>
-        </Content>
-      </Container>
+        )}
+        <Card style={styles.serverCard}>
+          <CardItem button style={styles.serverCardItem} onPress={Actions.createServer}>
+            <View>
+              <Icon name="md-add" />
+            </View>
+          </CardItem>
+        </Card>
+      </View>
     );
   }
 }

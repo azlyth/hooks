@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import { Container, Content } from 'native-base';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 
@@ -22,16 +21,11 @@ class ServerEditor extends Component {
 
   render() {
     return (
-      <Container>
-        <Content>
-          <Form ref="serverForm"
-            title="Update Server"
-            fields={Models.server}
-            initialValues={this.props.server}
-            submit={() => this.updateServer()}
-          />
-        </Content>
-      </Container>
+      <Form ref="serverForm"
+        title="Update Server"
+        fields={Models.server}
+        initialValues={this.props.server}
+        submit={() => this.updateServer()} />
     );
   }
 }

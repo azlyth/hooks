@@ -1,5 +1,4 @@
 import React, { Alert, Component } from 'react';
-import { Container, Content } from 'native-base';
 import { Actions, ActionConst } from 'react-native-router-flux';
 import Form from '../form';
 import { unlockStore } from '../../store';
@@ -13,14 +12,16 @@ class AppPassword extends Component {
   constructor(props) {
     super(props);
     this.state = {fields: this.passwordField()};
+    this.startApp = this.startApp.bind(this);
+    this.incorrectPassword = this.incorrectPassword.bind(this);
   }
 
   attemptToUnlock() {
     unlockStore(
       this.refs.passwordForm.state.password
     ).then(
-      () => this.startApp(),
-      () => this.incorrectPassword(),
+      this.startApp,
+      this.incorrectPassword,
     );
   }
 
@@ -46,15 +47,11 @@ class AppPassword extends Component {
 
   render() {
     return (
-      <Container>
-        <Content>
-          <Form ref="passwordForm"
-            title="Hooks"
-            fields={this.state.fields}
-            submitText={"Unlock"}
-            submit={() => this.attemptToUnlock()} />
-        </Content>
-      </Container>
+      <Form ref="passwordForm"
+        title="Hooks"
+        fields={this.state.fields}
+        submitText={"Unlock"}
+        submit={() => this.attemptToUnlock()} />
     );
   }
 }

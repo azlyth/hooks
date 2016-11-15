@@ -5,6 +5,36 @@ import styles from './styles.js';
 import { capitalize } from '../../utils';
 
 
+class FormField extends Component {
+
+  static propTypes = {
+    name: PropTypes.string,
+    config: PropTypes.object,
+    defaultValue: PropTypes.string,
+    onChange: PropTypes.func,
+  };
+
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <View key={this.props.name} style={styles.fieldContainer}>
+        <InputGroup style={styles.inputGroup} borderType="regular">
+          <Input style={styles.input}
+            placeholder={capitalize(this.props.name)}
+            defaultValue={this.props.defaultValue}
+            onChangeText={this.props.onChange}
+            secureTextEntry={this.props.config.secure} />
+        </InputGroup>
+        <Text style={styles.errorText}>{this.props.config.error || ' '}</Text>
+      </View>
+    );
+  }
+}
+
+
 class Form extends Component {
 
   static propTypes = {
@@ -44,16 +74,12 @@ class Form extends Component {
 
   createField(name, config) {
     return (
-      <View key={name} style={styles.fieldContainer}>
-        <InputGroup style={styles.inputGroup} borderType="regular">
-          <Input style={styles.input}
-            placeholder={capitalize(name)}
-            defaultValue={this.state[name]}
-            onChangeText={value => this.setState({ [name]: value })}
-            secureTextEntry={config.secure} />
-        </InputGroup>
-        <Text style={styles.errorText}>{config.error || ' '}</Text>
-      </View>
+      <FormField key={name}
+        name={name}
+        config={config}
+        defaultValue={this.state[name]}
+        onChange={value => this.setState({ [name]: value })}
+      />
     );
   }
 

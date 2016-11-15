@@ -10,7 +10,9 @@ const {
 const styles = StyleSheet.create({
   title: {
     textAlign: 'center',
-    margin: 30,
+    margin: 10,
+    marginLeft: 25,
+    marginRight: 25,
     fontSize: 35,
     color: 'black',
   },

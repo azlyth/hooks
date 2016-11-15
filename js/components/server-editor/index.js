@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-
 import { updateServer } from '../../actions/server';
+import Frame from '../frame';
 import Form from '../form';
 import Models from '../../models';
 
@@ -21,11 +21,13 @@ class ServerEditor extends Component {
 
   render() {
     return (
-      <Form ref="serverForm"
-        title="Update Server"
-        fields={Models.server}
-        initialValues={this.props.server}
-        submit={() => this.updateServer()} />
+      <Frame>
+        <Form ref="serverForm"
+          title="Update Server"
+          fields={Models.server}
+          initialValues={this.props.server}
+          submit={() => this.updateServer()} />
+      </Frame>
     );
   }
 }

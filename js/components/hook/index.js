@@ -1,8 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { InteractionManager, NativeModules, Text, View } from 'react-native';
-import { Container, Content, Spinner } from 'native-base';
+import { Spinner } from 'native-base';
 import { connect } from 'react-redux';
 import cancelableCallbacks from '../cancelable-callbacks';
+import Frame from '../frame';
 import styles from './styles.js';
 
 
@@ -61,13 +62,11 @@ class Hook extends Component {
 
   render() {
     return (
-      <Container style={{position: 'absolute', top: 0, left: 0}}>
-        <Content>
-          <View style={styles.body}>
-            <Result hook={this.props.hook} result={this.state.result} />
-          </View>
-        </Content>
-      </Container>
+      <Frame>
+        <View style={styles.body}>
+          <Result hook={this.props.hook} result={this.state.result} />
+        </View>
+      </Frame>
     );
   }
 }

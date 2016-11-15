@@ -14,8 +14,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'space-around',
-    height: screenHeight,
-    width: screenWidth,
   },
 
   title: {
@@ -45,7 +43,8 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    margin: 25,
+    marginLeft: 25,
+    marginRight: 25,
   },
 });
 

@@ -1,7 +1,7 @@
 import React, { Alert, Component } from 'react';
-import { Container, Content } from 'native-base';
 import { Actions, ActionConst } from 'react-native-router-flux';
 import merge from 'lodash/merge';
+import Frame from '../frame';
 import Form from '../form';
 import { unlockStore } from '../../store';
 
@@ -47,15 +47,13 @@ class AppPassword extends Component {
 
   render() {
     return (
-      <Container style={{position: 'absolute', top: 0, left: 0}}>
-        <Content>
-          <Form ref="passwordForm"
-            title="Hooks"
-            fields={this.state.fields}
-            submitText={"Unlock"}
-            submit={this.attemptToUnlock} />
-        </Content>
-      </Container>
+      <Frame>
+        <Form ref="passwordForm"
+          title="Hooks"
+          fields={this.state.fields}
+          submitText={"Unlock"}
+          submit={this.attemptToUnlock} />
+      </Frame>
     );
   }
 }

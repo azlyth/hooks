@@ -5,10 +5,11 @@ import {
   Text,
   View,
 } from 'react-native';
-import { Button, Card, CardItem, Container, Content, Spinner } from 'native-base';
+import { Button, Card, CardItem, Spinner } from 'native-base';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { removeServer } from '../../actions/server';
+import Frame from '../frame';
 import cancelableCallbacks from '../cancelable-callbacks';
 import styles from './styles.js';
 
@@ -25,7 +26,7 @@ function HookList(props) {
     return (
       <View>
         {props.hooks.map((hook, index) =>
-          <Card key={index} style={{margin: 15}}>
+          <Card key={index} style={styles.card}>
             <CardItem button onPress={() => Actions.executeHook({hook, server: props.server})}>
               <Text style={styles.contentText}>{hook}</Text>
             </CardItem>
@@ -113,18 +114,16 @@ class Server extends Component {
 
   render() {
     return (
-      <Container>
-        <Content style={styles.container}>
-          <View style={styles.body}>
-            <Text style={styles.title}>{this.props.server.user}@{this.props.server.host}</Text>
-            <View style={styles.buttonRow}>
-              <Button style={styles.button} onPress={() => this.updateSelf()} large bordered>Update</Button>
-              <Button style={styles.button} onPress={() => this.removeSelf()} danger large bordered>Remove</Button>
-            </View>
+      <Frame flex={0}>
+        <View style={styles.body}>
+          <Text style={styles.title}>{this.props.server.user}@{this.props.server.host}</Text>
+          <View style={styles.buttonRow}>
+            <Button style={styles.button} onPress={() => this.updateSelf()} large bordered>Update</Button>
+            <Button style={styles.button} onPress={() => this.removeSelf()} danger large bordered>Remove</Button>
           </View>
-          {this.renderBody()}
-        </Content>
-      </Container>
+        </View>
+        {this.renderBody()}
+      </Frame>
     );
   }
 }

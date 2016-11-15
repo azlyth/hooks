@@ -9,19 +9,14 @@ const {
 } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
-  container: {
-    margin: 10,
-  },
-
   body: {
     flex: 1,
     alignItems: 'center',
   },
 
   title: {
-    margin: 25,
-    marginTop: 15,
     fontSize: 35,
+    marginBottom: 25,
     color: 'black',
   },
 
@@ -30,11 +25,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: screenWidth - 50,
-    marginBottom: 15,
+    marginBottom: 25,
   },
 
   button: {
     width: (screenWidth / 2) - 35,
+  },
+
+  card: {
+    margin: 10,
   },
 
   contentText: {

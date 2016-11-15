@@ -17,6 +17,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
+  error: {
+    marginTop: 25,
+    fontSize: 25,
+    color: '#d9534f',
+  },
+
   contentText: {
     fontSize: 25,
     color: 'black',

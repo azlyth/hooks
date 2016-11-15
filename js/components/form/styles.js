@@ -6,13 +6,16 @@ import {
 
 const {
   width:  screenWidth,
+  height:  screenHeight,
 } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   content: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'space-around'
+    justifyContent: 'space-around',
+    height: screenHeight,
+    width: screenWidth,
   },
 
   title: {

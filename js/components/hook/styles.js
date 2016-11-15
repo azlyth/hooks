@@ -7,6 +7,7 @@ import {
 
 const {
   height: screenHeight,
+  width: screenWidth,
 } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
@@ -15,6 +16,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: screenHeight,
+    width: screenWidth,
   },
 
   contentText: {

@@ -1,10 +1,9 @@
 import React, { Alert, Component } from 'react';
+import { Container, Content } from 'native-base';
 import { Actions, ActionConst } from 'react-native-router-flux';
+import merge from 'lodash/merge';
 import Form from '../form';
 import { unlockStore } from '../../store';
-import merge from 'lodash/merge';
-
-import { AsyncStorage } from 'react-native';
 
 
 class AppPassword extends Component {
@@ -14,6 +13,7 @@ class AppPassword extends Component {
     this.state = {fields: this.passwordField()};
     this.startApp = this.startApp.bind(this);
     this.incorrectPassword = this.incorrectPassword.bind(this);
+    this.attemptToUnlock = this.attemptToUnlock.bind(this);
   }
 
   attemptToUnlock() {
@@ -47,11 +47,15 @@ class AppPassword extends Component {
 
   render() {
     return (
-      <Form ref="passwordForm"
-        title="Hooks"
-        fields={this.state.fields}
-        submitText={"Unlock"}
-        submit={() => this.attemptToUnlock()} />
+      <Container style={{position: 'absolute', top: 0, left: 0}}>
+        <Content>
+          <Form ref="passwordForm"
+            title="Hooks"
+            fields={this.state.fields}
+            submitText={"Unlock"}
+            submit={this.attemptToUnlock} />
+        </Content>
+      </Container>
     );
   }
 }

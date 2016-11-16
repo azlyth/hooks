@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Text, View } from 'react-native';
 import { Button } from 'native-base';
+import mapValues from 'lodash/mapValues';
 import FormField from '../form-field';
 import styles from './styles.js';
 
@@ -31,20 +32,14 @@ class Form extends Component {
     return false;
   }
 
-  fields() {
-    return Object.keys(this.props.fields);
-  }
-
   validates() {
-    fieldValidates = field => this.refs[field].validate();
-    return this.fields().every(fieldValidates);
+    // Use 'map' first (instead of just 'every') so that every field runs its validations
+    validationResults = Object.values(this.refs).map(field => field.validate());
+    return validationResults.every(x => x)
   }
 
   values() {
-    return this.fields().reduce(
-      (memo, field) => { return {...memo, [field]: this.refs[field].getValue()} },
-      {}
-    )
+    return mapValues(this.refs, field => field.getValue())
   }
 
   submit() {

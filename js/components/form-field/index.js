@@ -5,6 +5,10 @@ import { capitalize } from '../../utils';
 import styles from './styles.js';
 
 
+Validators = {
+  hasValue: (value) => [undefined, null, ''].includes(value) ? 'Fill this out.' : null,
+};
+
 class FormField extends Component {
 
   static propTypes = {
@@ -19,15 +23,21 @@ class FormField extends Component {
     super(props);
     this.state = {};
     this.onChange = this.onChange.bind(this);
+    this.config = this.generateConfiguration();
   }
 
-  config() {
+  generateConfiguration() {
     let defaultValues = {
       required: true,
       secure: false,
       validators: [],
     };
-    return {...defaultValues, ...this.props};
+    config = {...defaultValues, ...this.props};
+
+    // Add a validator if the field is required
+    if (config.required) config.validators.push(Validators.hasValue);
+
+    return config;
   }
 
   onChange(value) {
@@ -35,10 +45,13 @@ class FormField extends Component {
   }
 
   validate() {
-    return this.config().validators.every(validator => {
-      result = validator(this.state.value);
-      return result;
+    allValidate = this.config.validators.every(validator => {
+      let errorMessage = validator(this.state.value);
+      this.setState({error: errorMessage});
+      return !Boolean(errorMessage);
     });
+
+    return allValidate;
   }
 
   getValue() {
@@ -46,16 +59,14 @@ class FormField extends Component {
   }
 
   render() {
-    let config = this.config();
-
     return (
       <View style={styles.fieldContainer}>
         <InputGroup style={styles.inputGroup} borderType="regular">
           <Input style={styles.input}
-            placeholder={capitalize(config.name)}
-            defaultValue={config.initialValue}
+            placeholder={capitalize(this.config.name)}
+            defaultValue={this.config.initialValue}
             onChangeText={this.onChange}
-            secureTextEntry={config.secure} />
+            secureTextEntry={this.config.secure} />
         </InputGroup>
         <Text style={styles.errorText}>{this.state.error || ' '}</Text>
       </View>

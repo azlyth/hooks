@@ -14,18 +14,22 @@ class ServerCreator extends Component {
     addServer: PropTypes.func,
   }
 
-  addServer() {
-    this.props.addServer(this.refs.serverForm.state);
+  constructor(props) {
+    super(props);
+    this.addServer = this.addServer.bind(this);
+  }
+
+  addServer(form) {
+    this.props.addServer(form);
     Actions.pop();
   }
 
   render() {
     return (
       <Frame>
-        <Form ref="serverForm"
-          title="New Server"
+        <Form title="New Server"
           fields={Models.server}
-          submit={() => this.addServer()} />
+          submit={this.addServer} />
       </Frame>
     );
   }

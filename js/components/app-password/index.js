@@ -16,9 +16,9 @@ class AppPassword extends Component {
     this.attemptToUnlock = this.attemptToUnlock.bind(this);
   }
 
-  attemptToUnlock() {
+  attemptToUnlock(form) {
     unlockStore(
-      this.refs.passwordForm.state.password
+      form.password
     ).then(
       this.startApp,
       this.incorrectPassword,
@@ -48,8 +48,7 @@ class AppPassword extends Component {
   render() {
     return (
       <Frame>
-        <Form ref="passwordForm"
-          title="Hooks"
+        <Form title="Hooks"
           fields={this.state.fields}
           submitText={"Unlock"}
           submit={this.attemptToUnlock} />

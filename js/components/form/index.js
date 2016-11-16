@@ -1,38 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { Text, View } from 'react-native';
-import { Button, Input, InputGroup } from 'native-base';
+import { Button } from 'native-base';
+import FormField from '../form-field';
 import styles from './styles.js';
-import { capitalize } from '../../utils';
-
-
-class FormField extends Component {
-
-  static propTypes = {
-    name: PropTypes.string,
-    config: PropTypes.object,
-    defaultValue: PropTypes.string,
-    onChange: PropTypes.func,
-  };
-
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    return (
-      <View key={this.props.name} style={styles.fieldContainer}>
-        <InputGroup style={styles.inputGroup} borderType="regular">
-          <Input style={styles.input}
-            placeholder={capitalize(this.props.name)}
-            defaultValue={this.props.defaultValue}
-            onChangeText={this.props.onChange}
-            secureTextEntry={this.props.config.secure} />
-        </InputGroup>
-        <Text style={styles.errorText}>{this.props.config.error || ' '}</Text>
-      </View>
-    );
-  }
-}
 
 
 class Form extends Component {
@@ -61,26 +31,30 @@ class Form extends Component {
     return false;
   }
 
-  allFieldsEntered() {
-    fieldEntered = field => Boolean(this.state[field]);
-    return Object.keys(this.props.fields).every(fieldEntered);
+  fields() {
+    return Object.keys(this.props.fields);
+  }
+
+  validates() {
+    fieldValidates = field => this.refs[field].validate();
+    return this.fields().every(fieldValidates);
+  }
+
+  values() {
+    return this.fields().reduce(
+      (memo, field) => { return {...memo, [field]: this.refs[field].getValue()} },
+      {}
+    )
   }
 
   submit() {
-    if (this.allFieldsEntered()) {
-      this.props.submit();
+    if (this.validates()) {
+      this.props.submit(this.values());
     }
   }
 
   createField(name, config) {
-    return (
-      <FormField key={name}
-        name={name}
-        config={config}
-        defaultValue={this.state[name]}
-        onChange={value => this.setState({ [name]: value })}
-      />
-    );
+    return <FormField key={name} ref={name} name={name} {...config} />;
   }
 
   render() {
@@ -88,7 +62,7 @@ class Form extends Component {
       <View style={styles.content}>
         <Text style={styles.title}>{this.props.title}</Text>
         <View>
-          {Object.entries(this.props.fields).map(field => this.createField.apply(this, field))}
+          {Object.entries(this.props.fields).map(pair => this.createField(...pair))}
         </View>
         <Button style={styles.button}
           bordered large block

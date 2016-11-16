@@ -14,19 +14,23 @@ class ServerEditor extends Component {
     updateServer: React.PropTypes.func,
   }
 
-  updateServer() {
-    this.props.updateServer(this.refs.serverForm.state);
+  constructor(props) {
+    super(props);
+    this.updateServer = this.updateServer.bind(this);
+  }
+
+  updateServer(form) {
+    this.props.updateServer(form);
     Actions.pop();
   }
 
   render() {
     return (
       <Frame>
-        <Form ref="serverForm"
-          title="Update Server"
+        <Form title="Update Server"
           fields={Models.server}
           initialValues={this.props.server}
-          submit={() => this.updateServer()} />
+          submit={this.updateServer} />
       </Frame>
     );
   }

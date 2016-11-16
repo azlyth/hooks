@@ -12,6 +12,7 @@
     "native-base": "^0.5.11",
     "react": "15.3.2",
     "react-native": "^0.35.0",
+    "react-native-animatable": "^0.6.1",
     "react-native-dismiss-keyboard": "^1.0.0",
     "react-native-router-flux": "^3.36.0",
     "react-redux": "^4.4.5",

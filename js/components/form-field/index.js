@@ -1,12 +1,19 @@
 import React, { Component, PropTypes } from 'react';
 import { Text, View } from 'react-native';
 import { Input, InputGroup } from 'native-base';
+import * as Animatable from 'react-native-animatable';
 import { capitalize } from '../../utils';
 import styles from './styles.js';
 
 
 Validators = {
-  hasValue: (value) => [undefined, null, ''].includes(value) ? 'Fill this out.' : null,
+  hasValue: {
+    func: (value) => {
+      let filledOut = !([undefined, null, ''].includes(value));
+      let error = filledOut ? null : 'Fill this out.';
+      return error;
+    },
+  }
 };
 
 class FormField extends Component {
@@ -46,9 +53,16 @@ class FormField extends Component {
 
   validate() {
     allValidate = this.config.validators.every(validator => {
-      let errorMessage = validator(this.state.value);
-      this.setState({error: errorMessage});
-      return !Boolean(errorMessage);
+      // Update the state's error
+      let error = validator.func(this.state.value);
+      this.setState({error: error});
+
+      // Run the animation if provided
+      if (error && validator.animation) {
+        this.refs.animator[validator.animation](700);
+      }
+
+      return !Boolean(error);
     });
 
     return allValidate;
@@ -61,13 +75,15 @@ class FormField extends Component {
   render() {
     return (
       <View style={styles.fieldContainer}>
-        <InputGroup style={styles.inputGroup} borderType="regular">
-          <Input style={styles.input}
-            placeholder={capitalize(this.config.name)}
-            defaultValue={this.config.initialValue}
-            onChangeText={this.onChange}
-            secureTextEntry={this.config.secure} />
-        </InputGroup>
+        <Animatable.View ref="animator">
+          <InputGroup style={styles.inputGroup} borderType="regular">
+            <Input style={styles.input}
+              placeholder={capitalize(this.config.name)}
+              defaultValue={this.config.initialValue}
+              onChangeText={this.onChange}
+              secureTextEntry={this.config.secure} />
+          </InputGroup>
+        </Animatable.View>
         <Text style={styles.errorText}>{this.state.error || ' '}</Text>
       </View>
     );

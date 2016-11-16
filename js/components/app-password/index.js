@@ -3,45 +3,43 @@ import { Actions, ActionConst } from 'react-native-router-flux';
 import merge from 'lodash/merge';
 import Frame from '../frame';
 import Form from '../form';
-import { unlockStore } from '../../store';
+import { unlockStore, verifyStorePassword } from '../../store';
 
 
 class AppPassword extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {fields: this.passwordField()};
     this.startApp = this.startApp.bind(this);
-    this.incorrectPassword = this.incorrectPassword.bind(this);
-    this.attemptToUnlock = this.attemptToUnlock.bind(this);
   }
 
-  attemptToUnlock(form) {
-    unlockStore(
-      form.password
-    ).then(
-      this.startApp,
-      this.incorrectPassword,
-    );
-  }
-
-  startApp() {
+  startApp(form) {
+    unlockStore(form.password);
     Actions.listServers({type: ActionConst.RESET});
   }
 
-  incorrectPassword() {
-    this.setState(merge(this.state, {
-      fields: {
-        password: {
-          error: 'Incorrect password.'
-        }
-      }
-    }));
+  passwordValidator() {
+    return {
+      func: async (password) => {
+        let message = "Incorrect password."
+
+        if (!Boolean(password))
+          return message;
+
+        let passwordCorrect = await verifyStorePassword(password);
+        if (!passwordCorrect)
+          return message;
+      },
+      animation: "shake"
+    }
   }
 
   passwordField() {
     return {
-      'password': { secure: true }
+      'password': {
+        secure: true,
+        validators: [this.passwordValidator()],
+      }
     };
   }
 
@@ -49,9 +47,9 @@ class AppPassword extends Component {
     return (
       <Frame>
         <Form title="Hooks"
-          fields={this.state.fields}
+          fields={this.passwordField()}
           submitText={"Unlock"}
-          submit={this.attemptToUnlock} />
+          submit={this.startApp} />
       </Frame>
     );
   }

@@ -22,28 +22,18 @@ class Form extends Component {
     this.submit = this.submit.bind(this)
   }
 
-  componentWillReceiveProps(nextProps) {
-    // Force an update when the props change
-    this.forceUpdate();
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    // Only update when props change
-    return false;
-  }
-
-  validates() {
-    // Use 'map' first (instead of just 'every') so that every field runs its validations
-    validationResults = Object.values(this.refs).map(field => field.validate());
-    return validationResults.every(x => x)
+  async validates() {
+    validationPromises = Object.values(this.refs).map(async field => await field.validate());
+    validationResults = await Promise.all(validationPromises);
+    return validationResults.every(x => x);
   }
 
   values() {
     return mapValues(this.refs, field => field.getValue())
   }
 
-  submit() {
-    if (this.validates()) {
+  async submit() {
+    if (await this.validates()) {
       this.props.submit(this.values());
     }
   }

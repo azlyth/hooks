@@ -8,7 +8,7 @@ import styles from './styles.js';
 
 Validators = {
   hasValue: {
-    func: (value) => {
+    func: async (value) => {
       let filledOut = !([undefined, null, ''].includes(value));
       let error = filledOut ? null : 'Fill this out.';
       return error;
@@ -22,7 +22,10 @@ class FormField extends Component {
     name: PropTypes.string,
     initialValue: PropTypes.string,
     secure: PropTypes.bool,
-    validators: PropTypes.arrayOf(PropTypes.func),
+    validators: PropTypes.arrayOf(PropTypes.shape({
+      func: PropTypes.func,
+      animation: PropTypes.string,
+    })),
     required: PropTypes.bool,
   };
 
@@ -42,7 +45,7 @@ class FormField extends Component {
     config = {...defaultValues, ...this.props};
 
     // Add a validator if the field is required
-    if (config.required) config.validators.push(Validators.hasValue);
+    if (config.required) config.validators.unshift(Validators.hasValue);
 
     return config;
   }
@@ -51,21 +54,30 @@ class FormField extends Component {
     this.setState({value});
   }
 
-  validate() {
-    allValidate = this.config.validators.every(validator => {
-      // Update the state's error
-      let error = validator.func(this.state.value);
-      this.setState({error: error});
+  async validate() {
+    // Start all the validators
+    validatorPromises = await this.config.validators.map(async validator => {
+      let error = await validator.func(this.state.value);
+      return {...validator, error};
+    });
 
-      // Run the animation if provided
-      if (error && validator.animation) {
+    // Wait for all the results to come back
+    validatorResults = await Promise.all(validatorPromises);
+
+    // Show the error of the first validator with an error
+    allPassed = validatorResults.every(validator => {
+      // Note that the lack of an error will result in resetting the error field
+      let errorExists = Boolean(validator.error);
+      this.setState({error: validator.error});
+
+      if (errorExists && validator.animation) {
         this.refs.animator[validator.animation](700);
       }
 
-      return !Boolean(error);
+      return !errorExists;
     });
 
-    return allValidate;
+    return allPassed;
   }
 
   getValue() {

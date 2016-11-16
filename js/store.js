@@ -7,23 +7,19 @@ import reducer from './reducers';
 
 const store = createStore(reducer, undefined, autoRehydrate());
 
+createConfiguration = (password) => {
+  encryptor = createEncryptor({secretKey: password});
+  return {storage: AsyncStorage, transforms: [encryptor]}
+};
+
+export async function verifyStorePassword(password) {
+  let state = await getStoredState(createConfiguration(password));
+  let incorrect = Object.values(state).includes(null);
+  return !incorrect;
+};
+
 export function unlockStore(password) {
-  return new Promise((resolve, reject) => {
-
-    encryptor = createEncryptor({secretKey: password})
-    config = {storage: AsyncStorage, transforms: [encryptor]}
-
-    // Check if the password provided is correct
-    getStoredState(config).then((state) => {
-      if (Object.values(state).includes(null)) {
-        reject();
-      } else {
-        persistStore(store, config);
-        resolve();
-      }
-    })
-
-  })
-}
+  persistStore(store, createConfiguration(password));
+};
 
 export default store;

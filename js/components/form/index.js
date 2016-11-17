@@ -39,7 +39,11 @@ class Form extends Component {
   }
 
   createField(name, config) {
-    return <FormField key={name} ref={name} name={name} {...config} />;
+    return <FormField key={name}
+      ref={name}
+      name={name}
+      initialValue={this.state[name]}
+      {...config} />;
   }
 
   render() {

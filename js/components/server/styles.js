@@ -10,7 +10,6 @@ const {
 
 const styles = StyleSheet.create({
   body: {
-    flex: 1,
     alignItems: 'center',
   },
 
@@ -21,7 +20,6 @@ const styles = StyleSheet.create({
   },
 
   buttonRow: {
-    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: screenWidth - 50,

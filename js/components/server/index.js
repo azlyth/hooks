@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import {
   InteractionManager,
+  ListView,
   NativeModules,
   Text,
   View,
@@ -14,35 +15,6 @@ import cancelableCallbacks from '../cancelable-callbacks';
 import styles from './styles.js';
 
 
-function HookList(props) {
-  if (props.hooks.length === 0) {
-    let message = "\nThere aren't any hooks on this server.\n\n\nAdd executable files to\n\n~/.hooks-app/hooks\n\nand they'll be listed here."
-    return (
-      <View>
-        <Text style={styles.contentText}>{message}</Text>
-      </View>
-    );
-  } else {
-    return (
-      <View>
-        {props.hooks.map((hook, index) =>
-          <Card key={index} style={styles.card}>
-            <CardItem button onPress={() => Actions.executeHook({hook, server: props.server})}>
-              <Text style={styles.contentText}>{hook}</Text>
-            </CardItem>
-          </Card>
-        )}
-      </View>
-    );
-  }
-}
-
-HookList.propTypes = {
-  hooks: PropTypes.array,
-  server: PropTypes.object,
-};
-
-
 class Server extends Component {
 
   static propTypes = {
@@ -54,6 +26,7 @@ class Server extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+    this.renderHook = this.renderHook.bind(this);
   }
 
   componentDidMount() {
@@ -93,6 +66,7 @@ class Server extends Component {
   renderBody() {
     errorExists = this.state.error !== undefined;
     stillConnecting = this.state.hooks === undefined;
+    noHooksOnServer = this.state.hooks && this.state.hooks.length == 0;
 
     if (errorExists) {
       return (
@@ -107,9 +81,31 @@ class Server extends Component {
           <Text style={styles.contentText}>Finding hooks...</Text>
         </View>
       );
+    } else if (noHooksOnServer) {
+      let message = "\nThere aren't any hooks on this server.\n\n\nAdd executable files to\n\n~/.hooks-app/hooks\n\nand they'll be listed here."
+      return (
+        <View>
+          <Text style={styles.contentText}>{message}</Text>
+        </View>
+      );
     } else {
-      return <HookList hooks={this.state.hooks} server={this.props.server}/>;
+      const ds = new ListView.DataSource({rowHasChanged: (x, y) => x !== y});
+      return (
+        <ListView
+          dataSource={ds.cloneWithRows(this.state.hooks)}
+          renderRow={this.renderHook} />
+      );
     }
+  }
+
+  renderHook(hook) {
+    return (
+      <Card style={styles.card}>
+        <CardItem button onPress={() => Actions.executeHook({hook, server: this.props.server})}>
+          <Text style={styles.contentText}>{hook}</Text>
+        </CardItem>
+      </Card>
+    );
   }
 
   render() {

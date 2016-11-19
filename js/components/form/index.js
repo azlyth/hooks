@@ -9,6 +9,7 @@ import styles from './styles.js';
 class Form extends Component {
 
   static propTypes = {
+    children: PropTypes.node,
     title: PropTypes.string,
     initialValues: PropTypes.object,
     fields: PropTypes.object,
@@ -46,10 +47,19 @@ class Form extends Component {
       {...config} />;
   }
 
+  renderTitle() {
+    if (this.props.title) {
+      return (
+        <Text style={styles.title}>{this.props.title}</Text>
+      );
+    }
+  }
+
   render() {
     return (
       <View style={styles.content}>
-        <Text style={styles.title}>{this.props.title}</Text>
+        { this.renderTitle() }
+        { this.props.children }
         <View>
           {Object.entries(this.props.fields).map(pair => this.createField(...pair))}
         </View>

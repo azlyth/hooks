@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 35,
+    fontSize: 40,
     color: 'black',
   },
 

@@ -30,6 +30,10 @@ const styles = StyleSheet.create({
     width: (screenWidth / 2) - 35,
   },
 
+  hookList: {
+    flex: 1,
+  },
+
   card: {
     margin: 10,
     marginBottom: 15,
@@ -42,15 +46,12 @@ const styles = StyleSheet.create({
   },
 
   wait: {
-    marginTop: 25,
-    flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },
 
   error: {
-    marginTop: 25,
     fontSize: 25,
     color: '#d9534f',
   },

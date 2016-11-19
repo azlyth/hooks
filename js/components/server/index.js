@@ -3,6 +3,7 @@ import {
   InteractionManager,
   ListView,
   NativeModules,
+  RefreshControl,
   Text,
   View,
 } from 'react-native';
@@ -25,8 +26,10 @@ class Server extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {refreshing: false};
     this.renderHook = this.renderHook.bind(this);
+    this.findHooks = this.findHooks.bind(this);
+    this.createRefreshControl = this.createRefreshControl.bind(this);
   }
 
   componentDidMount() {
@@ -34,6 +37,8 @@ class Server extends Component {
   }
 
   findHooks() {
+    this.setState({refreshing: true});
+
     // Get the hooks from the server
     command = "find .hooks-app/hooks/ -type f -perm -111 | sed 's/^.hooks-app\\\/hooks\\\///'";
     promise = NativeModules.SSH.execute(this.props.server, command);
@@ -41,11 +46,17 @@ class Server extends Component {
     // Attach the callbacks to a promise that will cancel them on a back press
     this.props.cancelOnBack(promise, (result) => {
       validHook = (hook) => !(['.', '..'].includes(hook));
-      this.setState({hooks: result.filter(validHook)})
+      this.setState({
+        hooks: result.filter(validHook),
+        refreshing: false,
+      })
     }, (error) => {
       message = 'Error: ' + error.message;
       console.log(message);
-      this.setState({error: message});
+      this.setState({
+        error: message,
+        refreshing: false,
+      });
     })
   }
 
@@ -92,10 +103,20 @@ class Server extends Component {
       const ds = new ListView.DataSource({rowHasChanged: (x, y) => x !== y});
       return (
         <ListView
+          style={styles.hookList}
+          refreshControl={this.createRefreshControl()}
           dataSource={ds.cloneWithRows(this.state.hooks)}
           renderRow={this.renderHook} />
       );
     }
+  }
+
+  createRefreshControl() {
+    return (
+      <RefreshControl
+        refreshing={this.state.refreshing}
+        onRefresh={this.findHooks} />
+    );
   }
 
   renderHook(hook) {
@@ -110,7 +131,7 @@ class Server extends Component {
 
   render() {
     return (
-      <Frame flex={0}>
+      <Frame>
         <View style={styles.body}>
           <Text style={styles.title}>{this.props.server.user}@{this.props.server.host}</Text>
           <View style={styles.buttonRow}>

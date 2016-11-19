@@ -20,7 +20,8 @@ class ServerEditor extends Component {
   }
 
   updateServer(form) {
-    this.props.updateServer(form);
+    // Merge with props.server because we need the ID
+    this.props.updateServer({...this.props.server, ...form});
     Actions.pop();
   }
 

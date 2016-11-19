@@ -31,7 +31,7 @@ class FormField extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {value: props.initialValue};
     this.onChange = this.onChange.bind(this);
     this.config = this.generateConfiguration();
   }

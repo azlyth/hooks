@@ -9,14 +9,17 @@ const {
 } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
-  body: {
+  header: {
     alignItems: 'center',
+    marginLeft: 10,
+    marginRight: 10,
   },
 
   title: {
     fontSize: 35,
     marginBottom: 25,
     color: 'black',
+    textAlign: 'center',
   },
 
   buttonRow: {
@@ -30,13 +33,13 @@ const styles = StyleSheet.create({
     width: (screenWidth / 3) - 35,
   },
 
-  hookList: {
+  body: {
     flex: 1,
+    margin: 10,
   },
 
   card: {
-    margin: 10,
-    marginBottom: 15,
+    marginBottom: 25,
   },
 
   contentText: {
@@ -52,7 +55,7 @@ const styles = StyleSheet.create({
   },
 
   errorContainer: {
-    marginTop: 20,
+    marginTop: 10,
     alignItems: 'center',
   },
 

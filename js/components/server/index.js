@@ -86,7 +86,7 @@ class Server extends Component {
       this.setState({refreshing: false});
     }, (error) => {
       this.setState({
-        error: 'Error:' + error.message,
+        error: 'Error: ' + error.message,
         refreshing: false,
       });
     })
@@ -148,7 +148,7 @@ class Server extends Component {
   render() {
     return (
       <Frame>
-        <View style={styles.body}>
+        <View style={styles.header}>
           <Text style={styles.title}>{this.props.server.user}@{this.props.server.host}</Text>
           <View style={styles.buttonRow}>
             <Button style={styles.button} onPress={this.updateSelf} large bordered>Edit</Button>
@@ -156,7 +156,9 @@ class Server extends Component {
             <Button style={styles.button} onPress={this.removeSelf} danger large bordered>Remove</Button>
           </View>
         </View>
-        {this.renderBody()}
+        <View style={styles.body}>
+          {this.renderBody()}
+        </View>
       </Frame>
     );
   }

@@ -28,7 +28,7 @@ class ServerEditor extends Component {
   render() {
     return (
       <Frame>
-        <Form title="Update Server"
+        <Form title="Edit Server"
           fields={Models.server}
           initialValues={this.props.server}
           submit={this.updateServer} />

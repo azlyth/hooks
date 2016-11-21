@@ -16,6 +16,42 @@ import cancelableCallbacks from '../cancelable-callbacks';
 import styles from './styles.js';
 
 
+const Wait = () => {
+  return (
+    <View style={styles.wait}>
+      <Spinner style={styles.spinner} color="blue" />
+      <Text style={styles.contentText}>Finding hooks...</Text>
+    </View>
+  );
+}
+
+const Help = () => {
+  let message = [
+    "There aren't any hooks on this server.",
+    "Add executable files to the directory below to have them listed here:",
+    "~/.hooks-app/hooks",
+  ].join("\n\n");
+
+  return (
+    <View style={{marginTop: 25}}>
+      <Text style={ styles.contentText }>{ message }</Text>
+    </View>
+  );
+}
+
+const Error = (props) => {
+  return (
+    <View style={styles.errorContainer}>
+      <Text style={styles.error}>{props.message}</Text>
+    </View>
+  );
+};
+
+Error.propTypes = {
+  message: PropTypes.string,
+}
+
+
 class Server extends Component {
 
   static propTypes = {
@@ -80,25 +116,11 @@ class Server extends Component {
     noHooksOnServer = this.state.hooks && this.state.hooks.length == 0;
 
     if (errorExists) {
-      return (
-        <View style={styles.wait}>
-          <Text style={styles.error}>{this.state.error}</Text>
-        </View>
-      );
+      return <Error message={this.state.error} />;
     } else if (stillConnecting) {
-      return (
-        <View style={styles.wait}>
-          <Spinner style={styles.spinner} color="blue" />
-          <Text style={styles.contentText}>Finding hooks...</Text>
-        </View>
-      );
+      return <Wait />;
     } else if (noHooksOnServer) {
-      let message = "\nThere aren't any hooks on this server.\n\n\nAdd executable files to\n\n~/.hooks-app/hooks\n\nand they'll be listed here."
-      return (
-        <View>
-          <Text style={styles.contentText}>{message}</Text>
-        </View>
-      );
+      return <Help />;
     } else {
       const ds = new ListView.DataSource({rowHasChanged: (x, y) => x !== y});
       return (

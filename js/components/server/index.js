@@ -16,15 +16,6 @@ import cancelableCallbacks from '../cancelable-callbacks';
 import styles from './styles.js';
 
 
-const Wait = () => {
-  return (
-    <View style={styles.wait}>
-      <Spinner style={styles.spinner} color="blue" />
-      <Text style={styles.contentText}>Finding hooks...</Text>
-    </View>
-  );
-}
-
 const Help = () => {
   let message = [
     "There aren't any hooks on this server.",
@@ -117,16 +108,12 @@ class Server extends Component {
 
   renderBody() {
     errorExists = this.state.error !== null;
-    stillConnecting = this.state.refreshing && this.props.server.hooks.length == 0;
-    noHooksOnServer = this.props.server.hooks.length == 0;
+    refreshing = this.state.refreshing;
+    hooksExist = this.props.server.hooks.length > 0;
 
     if (errorExists) {
       return <Error message={this.state.error} />;
-    } else if (stillConnecting) {
-      return <Wait />;
-    } else if (noHooksOnServer) {
-      return <Help />;
-    } else {
+    } else if (refreshing || hooksExist) {
       const ds = new ListView.DataSource({rowHasChanged: (x, y) => x !== y});
       return (
         <ListView
@@ -135,6 +122,8 @@ class Server extends Component {
           dataSource={ds.cloneWithRows(this.props.server.hooks)}
           renderRow={this.renderHook} />
       );
+    } else {
+      return <Help />;
     }
   }
 

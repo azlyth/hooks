@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    width: (screenWidth / 2) - 35,
+    width: (screenWidth / 3) - 35,
   },
 
   hookList: {

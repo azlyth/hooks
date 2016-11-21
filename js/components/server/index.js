@@ -62,9 +62,11 @@ class Server extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {refreshing: false};
+    this.state = {hooks: [], refreshing: true, error: null};
     this.renderHook = this.renderHook.bind(this);
     this.findHooks = this.findHooks.bind(this);
+    this.updateSelf = this.updateSelf.bind(this);
+    this.removeSelf = this.removeSelf.bind(this);
     this.createRefreshControl = this.createRefreshControl.bind(this);
   }
 
@@ -73,7 +75,7 @@ class Server extends Component {
   }
 
   findHooks() {
-    this.setState({refreshing: true});
+    this.setState({refreshing: true, error: null});
 
     // Get the hooks from the server
     command = "find .hooks-app/hooks/ -type f -perm -111 | sed 's/^.hooks-app\\\/hooks\\\///'";
@@ -111,9 +113,9 @@ class Server extends Component {
   }
 
   renderBody() {
-    errorExists = this.state.error !== undefined;
-    stillConnecting = this.state.hooks === undefined;
-    noHooksOnServer = this.state.hooks && this.state.hooks.length == 0;
+    errorExists = this.state.error !== null;
+    stillConnecting = this.state.refreshing && this.state.hooks.length == 0;
+    noHooksOnServer = this.state.hooks.length == 0;
 
     if (errorExists) {
       return <Error message={this.state.error} />;
@@ -157,8 +159,9 @@ class Server extends Component {
         <View style={styles.body}>
           <Text style={styles.title}>{this.props.server.user}@{this.props.server.host}</Text>
           <View style={styles.buttonRow}>
-            <Button style={styles.button} onPress={() => this.updateSelf()} large bordered>Update</Button>
-            <Button style={styles.button} onPress={() => this.removeSelf()} danger large bordered>Remove</Button>
+            <Button style={styles.button} onPress={this.updateSelf} large bordered>Edit</Button>
+            <Button style={styles.button} onPress={this.findHooks} info large bordered>Refresh</Button>
+            <Button style={styles.button} onPress={this.removeSelf} danger large bordered>Remove</Button>
           </View>
         </View>
         {this.renderBody()}

@@ -10,7 +10,7 @@ import {
 import { Button, Card, CardItem, Spinner } from 'native-base';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-import { removeServer } from '../../actions/server';
+import { removeServer, updateServer } from '../../actions/server';
 import Frame from '../frame';
 import cancelableCallbacks from '../cancelable-callbacks';
 import styles from './styles.js';
@@ -57,12 +57,13 @@ class Server extends Component {
   static propTypes = {
     server: PropTypes.object,
     removeServer: PropTypes.func,
+    updateServer: PropTypes.func,
     cancelOnBack: PropTypes.func,
   };
 
   constructor(props) {
     super(props);
-    this.state = {hooks: [], refreshing: true, error: null};
+    this.state = {refreshing: true, error: null};
     this.renderHook = this.renderHook.bind(this);
     this.findHooks = this.findHooks.bind(this);
     this.updateSelf = this.updateSelf.bind(this);
@@ -71,7 +72,11 @@ class Server extends Component {
   }
 
   componentDidMount() {
-    InteractionManager.runAfterInteractions(() => this.findHooks());
+    if (this.props.server.hooks.length === 0) {
+      InteractionManager.runAfterInteractions(() => this.findHooks());
+    } else {
+      this.setState({refreshing: false});
+    }
   }
 
   findHooks() {
@@ -83,16 +88,14 @@ class Server extends Component {
 
     // Attach the callbacks to a promise that will cancel them on a back press
     this.props.cancelOnBack(promise, (result) => {
+      // Filter out the valid hooks and save them to the server
       validHook = (hook) => !(['.', '..'].includes(hook));
-      this.setState({
-        hooks: result.filter(validHook),
-        refreshing: false,
-      })
+      validHooks = result.filter(validHook);
+      this.props.updateServer({...this.props.server, hooks: validHooks});
+      this.setState({refreshing: false});
     }, (error) => {
-      message = 'Error: ' + error.message;
-      console.log(message);
       this.setState({
-        error: message,
+        error: 'Error:' + error.message,
         refreshing: false,
       });
     })
@@ -114,8 +117,8 @@ class Server extends Component {
 
   renderBody() {
     errorExists = this.state.error !== null;
-    stillConnecting = this.state.refreshing && this.state.hooks.length == 0;
-    noHooksOnServer = this.state.hooks.length == 0;
+    stillConnecting = this.state.refreshing && this.props.server.hooks.length == 0;
+    noHooksOnServer = this.props.server.hooks.length == 0;
 
     if (errorExists) {
       return <Error message={this.state.error} />;
@@ -129,7 +132,7 @@ class Server extends Component {
         <ListView
           style={styles.hookList}
           refreshControl={this.createRefreshControl()}
-          dataSource={ds.cloneWithRows(this.state.hooks)}
+          dataSource={ds.cloneWithRows(this.props.server.hooks)}
           renderRow={this.renderHook} />
       );
     }
@@ -178,7 +181,8 @@ function mapState(state, ownProps) {
 
 function mapDispatch(dispatch) {
   return {
-    removeServer: server => dispatch(removeServer(server))
+    removeServer: server => dispatch(removeServer(server)),
+    updateServer: server => dispatch(updateServer(server)),
   };
 }
 

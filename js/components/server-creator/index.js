@@ -20,7 +20,7 @@ class ServerCreator extends Component {
   }
 
   addServer(form) {
-    this.props.addServer(form);
+    this.props.addServer({...form, hooks: []});
     Actions.pop();
   }
 

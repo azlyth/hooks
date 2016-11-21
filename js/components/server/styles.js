@@ -38,14 +38,26 @@ const styles = StyleSheet.create({
     margin: 10,
   },
 
+  helpText: {
+    fontSize: 25,
+    color: 'black',
+    textAlign: 'center',
+  },
+
   card: {
     marginBottom: 25,
   },
 
-  contentText: {
-    textAlign: 'center',
+  cardItem: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+
+  cardText: {
     fontSize: 25,
     color: 'black',
+    textAlign: 'center',
   },
 
   wait: {
@@ -61,7 +73,7 @@ const styles = StyleSheet.create({
 
   error: {
     fontSize: 25,
-    color: '#d9534f',
+    color: '#d9534f',  // Same as NativeBase's default error color
   },
 
   spinner: {

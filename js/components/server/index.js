@@ -25,7 +25,7 @@ const Help = () => {
 
   return (
     <View style={{marginTop: 25}}>
-      <Text style={ styles.contentText }>{ message }</Text>
+      <Text style={ styles.helpText }>{ message }</Text>
     </View>
   );
 }
@@ -138,8 +138,8 @@ class Server extends Component {
   renderHook(hook) {
     return (
       <Card style={styles.card}>
-        <CardItem button onPress={() => Actions.executeHook({hook, server: this.props.server})}>
-          <Text style={styles.contentText}>{hook}</Text>
+        <CardItem cardBody style={styles.cardItem} button onPress={() => Actions.executeHook({hook, server: this.props.server})}>
+          <Text style={styles.cardText}>{hook}</Text>
         </CardItem>
       </Card>
     );

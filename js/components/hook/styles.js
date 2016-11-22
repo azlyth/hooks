@@ -1,16 +1,4 @@
-
-import {
-  Dimensions,
-  StyleSheet,
-} from 'react-native';
-
-
-const {
-  height: screenHeight,
-  width: screenWidth,
-} = Dimensions.get('window');
-
-const styles = StyleSheet.create({
+const styles = {
   body: {
     flex: 1,
     justifyContent: 'center',
@@ -19,15 +7,9 @@ const styles = StyleSheet.create({
 
   error: {
     marginTop: 25,
-    fontSize: 25,
     color: '#d9534f',
   },
-
-  contentText: {
-    fontSize: 25,
-    color: 'black',
-  },
-});
+};
 
 export default styles;
 

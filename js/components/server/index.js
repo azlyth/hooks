@@ -12,6 +12,7 @@ import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { removeServer, updateServer } from '../../actions/server';
 import Frame from '../frame';
+import ContentText from '../content-text';
 import cancelableCallbacks from '../cancelable-callbacks';
 import styles from './styles.js';
 
@@ -25,7 +26,7 @@ const Help = () => {
 
   return (
     <View style={{marginTop: 25}}>
-      <Text style={ styles.helpText }>{ message }</Text>
+      <ContentText centered>{ message }</ContentText>
     </View>
   );
 }
@@ -33,7 +34,7 @@ const Help = () => {
 const Error = (props) => {
   return (
     <View style={styles.errorContainer}>
-      <Text style={styles.error}>{props.message}</Text>
+      <ContentText style={styles.error}>{props.message}</ContentText>
     </View>
   );
 };
@@ -139,7 +140,7 @@ class Server extends Component {
     return (
       <Card style={styles.card}>
         <CardItem cardBody style={styles.cardItem} button onPress={() => Actions.executeHook({hook, server: this.props.server})}>
-          <Text style={styles.cardText}>{hook}</Text>
+          <ContentText centered>{hook}</ContentText>
         </CardItem>
       </Card>
     );

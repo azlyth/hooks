@@ -7,6 +7,7 @@ import { Card, CardItem, Icon } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import Frame from '../frame';
+import ContentText from '../content-text';
 import styles from './styles.js';
 
 
@@ -27,7 +28,7 @@ class ServerList extends Component {
         {this.props.servers.map((server, index) =>
           <Card key={index} style={styles.serverCard}>
             <CardItem button style={styles.serverCardItem} onPress={() => Actions.useServer({server})}>
-              <Text style={styles.serverText}>{server.user}@{server.host}</Text>
+              <ContentText centered style={styles.serverText}>{server.user}@{server.host}</ContentText>
             </CardItem>
           </Card>
         )}

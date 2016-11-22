@@ -1,6 +1,5 @@
 import {
   Dimensions,
-  StyleSheet,
 } from 'react-native';
 
 
@@ -8,7 +7,7 @@ const {
   width: screenWidth,
 } = Dimensions.get('window');
 
-const styles = StyleSheet.create({
+const styles = {
   header: {
     alignItems: 'center',
     marginLeft: 10,
@@ -38,12 +37,6 @@ const styles = StyleSheet.create({
     margin: 10,
   },
 
-  helpText: {
-    fontSize: 25,
-    color: 'black',
-    textAlign: 'center',
-  },
-
   card: {
     marginBottom: 25,
   },
@@ -52,12 +45,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center'
-  },
-
-  cardText: {
-    fontSize: 25,
-    color: 'black',
-    textAlign: 'center',
   },
 
   wait: {
@@ -72,14 +59,13 @@ const styles = StyleSheet.create({
   },
 
   error: {
-    fontSize: 25,
     color: '#d9534f',  // Same as NativeBase's default error color
   },
 
   spinner: {
     marginRight: 15,
   },
-});
+};
 
 export default styles;
 

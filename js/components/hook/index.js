@@ -3,6 +3,7 @@ import { InteractionManager, NativeModules, Text, View } from 'react-native';
 import { Spinner } from 'native-base';
 import cancelableCallbacks from '../cancelable-callbacks';
 import Frame from '../frame';
+import ContentText from '../content-text';
 import styles from './styles.js';
 
 
@@ -10,7 +11,7 @@ function Result(props) {
   return (
     <View>
       {props.result.map((line, index) =>
-        <Text key={index} style={styles.contentText}>{line}</Text>
+        <ContentText key={index}>{line}</ContentText>
       )}
     </View>
   );
@@ -56,14 +57,14 @@ class Hook extends Component {
 
     if (errorExists) {
       return (
-        <View style={styles.wait}>
-          <Text style={styles.error}>{this.state.error}</Text>
+        <View>
+          <ContentText style={styles.error}>{this.state.error}</ContentText>
         </View>
       );
     } else if (stillRunning) {
       return (
-        <View style={styles.wait}>
-          <Text style={styles.contentText}>Running "{this.props.hook}"...</Text>
+        <View>
+          <ContentText centered>Running "{this.props.hook}"...</ContentText>
           <Spinner color="blue" />
         </View>
       );

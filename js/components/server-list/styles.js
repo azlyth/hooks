@@ -1,25 +1,20 @@
 import {
-  Dimensions,
   StyleSheet,
 } from 'react-native';
 
-const {
-  height: screenHeight,
-} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   title: {
-    textAlign: 'center',
     margin: 10,
     marginLeft: 25,
     marginRight: 25,
     fontSize: 35,
     color: 'black',
+    textAlign: 'center',
   },
 
   content: {
     flex: 1,
-    height: screenHeight,
     alignItems: 'center',
     justifyContent: 'space-around'
   },
@@ -36,10 +31,7 @@ const styles = StyleSheet.create({
   },
 
   serverText: {
-    textAlign: 'center',
     padding: 15,
-    fontSize: 25,
-    color: 'black',
   },
 });
 

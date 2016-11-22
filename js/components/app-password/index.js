@@ -1,7 +1,6 @@
 import React, { Alert, Component } from 'react';
 import { AsyncStorage, Text } from 'react-native';
 import { Actions, ActionConst } from 'react-native-router-flux';
-import merge from 'lodash/merge';
 import Frame from '../frame';
 import Form from '../form';
 import { unlockStore, verifyStorePassword } from '../../store';

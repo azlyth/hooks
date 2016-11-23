@@ -9,6 +9,10 @@ class BaseText extends Component {
     centered: PropTypes.bool,
   }
 
+  defaultStyle() {
+    return {};
+  }
+
   propStyles() {
     propToStyle = {
       centered: {textAlign: 'center'},
@@ -24,8 +28,10 @@ class BaseText extends Component {
 
   defaultProps() {
     return {
-      style: {},
-      ...this.propStyles(),
+      style: {
+        ...this.defaultStyle(),
+        ...this.propStyles(),
+      }
     };
   }
 

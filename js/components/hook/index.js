@@ -40,7 +40,7 @@ class Hook extends Component {
   }
 
   executeHook() {
-    command = '.hooks-app/hooks/' + this.props.hook;
+    command = '".hooks-app/hooks/' + this.props.hook + '"';
 
     promise = NativeModules.SSH.execute(this.props.server, command)
     this.props.cancelOnBack(promise, (result) => {

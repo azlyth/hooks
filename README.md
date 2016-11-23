@@ -2,7 +2,7 @@
 
 List, run, and see the output from scripts in your ```.hooks-app/hooks/``` directory. All over SSH, so there's nothing to install on your server.
 
-![wow](https://github.com/azlyth/hooks/raw/master/media/demo.gif)
+![wow](media/demo.gif)
 
 ## Example uses
 

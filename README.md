@@ -11,6 +11,10 @@ List, run, and see the output from scripts in your ```.hooks-app/hooks/``` direc
 - Build and publish the a static site
 - Start a program on your laptop
 
+## Assumptions
+
+The app expects ```find``` and ```sed``` to exist on the server.
+
 ## Develop
 
 - [Install the React Native CLI and the Android SDK](https://facebook.github.io/react-native/docs/getting-started.html)
